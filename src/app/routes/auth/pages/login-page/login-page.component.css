@@ -1,0 +1,11 @@
+:host {
+    width: 100%;
+}
+
+@media (min-width: 1000px) {
+    :host {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
