@@ -29,12 +29,11 @@ export class AuthService {
 
     login(username: string, password: string) {
 
-        return this.httpClient.post<AuthResponse | AuthFailure>(environment.backendBaseUrl + "/api/auth/login", {
+        return this.httpClient.post<AuthResponse | AuthFailure>(`${environment.backendBaseUrl}/api/auth/login`, {
             username: username,
             password: password
-        }, {
-            observe: "response",
-        }).pipe(
+        }, {observe: "response"}
+        ).pipe(
             tap({
                 next: (res) => {
 
@@ -70,6 +69,14 @@ export class AuthService {
 
             })
         )
+
+    }
+
+    logout() {
+
+        localStorage.removeItem('auth');
+
+        this.authentication?.next(null);
 
     }
 
