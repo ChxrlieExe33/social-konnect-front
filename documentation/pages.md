@@ -31,3 +31,36 @@ A page with the current user's information at the top, then a list of their post
 ## New post
 
 This page is for creating new posts.
+
+## View other profile
+
+This page won't be in the navbar, it will be reached by clicking a username or profile picture. It will still be on the main layout.
+
+## Auth layout
+
+Will be shared for auth related pages
+
+## Log in
+
+Used to authenticate
+
+## Register
+
+Used to register users
+
+---
+
+# Routes
+
+This is going to be the route structure for each
+
+- /auth
+  - /login
+  - /register
+- /feed/explore
+- /feed/following
+- /search
+- /create
+- /profile/me
+- /profile/{username}
+

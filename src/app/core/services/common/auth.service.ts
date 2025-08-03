@@ -98,4 +98,12 @@ export class AuthService {
 
     }
 
+    public getCurrentToken() : string {
+
+        const auth = this.authentication.value;
+
+        return auth!.jwt;
+
+    }
+
 }
