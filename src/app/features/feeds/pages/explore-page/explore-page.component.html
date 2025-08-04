@@ -1,0 +1,15 @@
+<section class="w-full h-full flex flex-col items-center justify-items-start p-5">
+
+    <h1 class="text-2xl font-bold mb-5">Explore</h1>
+
+
+    <h1 class="text-red-800 text-2xl">{{error()}}</h1>
+
+    @for (post of loadedPosts(); track post.postId) {
+
+        <app-post class="mb-3" [postData]="post"/>
+
+    }
+
+
+</section>

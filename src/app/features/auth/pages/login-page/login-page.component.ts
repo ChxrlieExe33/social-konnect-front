@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit, signal, ViewChild} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -19,7 +20,7 @@ export class LoginPageComponent implements OnInit {
 
     error = signal<string>('');
 
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService, private router : Router) { }
 
     ngOnInit() {
 
@@ -51,6 +52,7 @@ export class LoginPageComponent implements OnInit {
 
                 }, next : auth => {
                     this.loginForm.nativeElement.reset();
+                    this.router.navigate(['feed', 'following']);
                 }
             });
 
