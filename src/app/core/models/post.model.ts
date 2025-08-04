@@ -6,4 +6,5 @@ export type Post = {
     media: PostMedia[],
     username: string,
     createdAt: Date,
+    profilePictureUrl: string,
 }
