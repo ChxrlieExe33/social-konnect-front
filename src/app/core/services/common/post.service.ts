@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Post} from '../../models/post.model';
-import {BehaviorSubject, Observable, tap} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, map, Observable, of, tap} from 'rxjs';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 
 type PostResponse = {
@@ -24,15 +24,36 @@ export class PostService {
 
     constructor(private httpClient : HttpClient) { }
 
-    getExplorePosts(): Observable<PostResponse> {
+    getExplorePosts(): Observable<Post[]> {
 
         return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post`,).pipe(
             tap({
                 next: (res) =>  {
                     this.loadedPosts.next(res.content);
                 }
-            })
+            }),
+            map(
+                (res: PostResponse) => res.content
+            )
         );
 
     }
+
+    getExplorePostsIfEmpty(): Observable<Post[]> {
+
+        const currentPosts = this.loadedPosts.value;
+
+        if (currentPosts.length === 0) {
+
+            return this.getExplorePosts();
+
+        } else {
+
+            return of(currentPosts);
+
+        }
+
+    }
+
+
 }

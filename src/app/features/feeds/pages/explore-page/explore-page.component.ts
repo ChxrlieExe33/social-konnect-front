@@ -24,26 +24,22 @@ export class ExplorePageComponent implements OnInit {
 
         this.subscribeToPosts();
 
-        // Only make initial request if there is no posts in state stored in the service.
-        if (this.loadedPosts().length === 0) {
+        this.postService.getExplorePostsIfEmpty().subscribe({
 
-            this.postService.getExplorePosts().subscribe({
-                error: (err : HttpErrorResponse) => {
+            // Only handle the error since the state is being set in the state.
+            error: (err : HttpErrorResponse) => {
 
-                    // Check to make sure the body of the custom error dto was actually sent
-                    if (err.error && typeof err.error === 'object' && err.error.message) {
-                        console.log(err.error.message);
-                        this.error.set(err.error.message);
-                    } else {
-                        console.log(err);
-                        this.error.set("Something went wrong, please try again later.");
-                    }
-
-
+                // Check to make sure the body of the custom error dto was actually sent
+                if (err.error && typeof err.error === 'object' && err.error.message) {
+                    console.log(err.error.message);
+                    this.error.set(err.error.message);
+                } else {
+                    console.log(err);
+                    this.error.set("Something went wrong, please try again later.");
                 }
-            })
 
-        }
+            }
+        })
 
     }
 
