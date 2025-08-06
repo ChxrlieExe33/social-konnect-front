@@ -1,14 +1,17 @@
-import {Component, OnInit, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {PostComponent} from '../../../../shared/components/post/post.component';
 import {Post} from '../../../../core/models/post.model';
 import {PostService} from '../../../../core/services/common/post.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import { takeUntil } from 'rxjs';
+import { AutoDestroyService } from '../../../../core/services/utils/auto-destroy.service';
 
 @Component({
   selector: 'app-explore-page',
     imports: [
         PostComponent
     ],
+    providers: [AutoDestroyService],
   templateUrl: './explore-page.component.html',
   styleUrl: './explore-page.component.css'
 })
@@ -16,6 +19,8 @@ export class ExplorePageComponent implements OnInit {
 
     loadedPosts = signal<Post[]>([]);
     error = signal<string>('');
+
+    protected readonly destroy$: AutoDestroyService = inject(AutoDestroyService);
 
     constructor(private postService: PostService) {
     }
@@ -45,9 +50,13 @@ export class ExplorePageComponent implements OnInit {
 
     subscribeToPosts() {
 
-        this.postService.loadedPosts$.subscribe(posts => {
-            this.loadedPosts.set(posts);
-        })
+        this.postService.loadedPosts$
+            .pipe(
+                takeUntil(this.destroy$)
+            )
+            .subscribe(posts => {
+                this.loadedPosts.set(posts);
+            })
 
     }
 
