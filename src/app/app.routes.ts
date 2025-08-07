@@ -13,6 +13,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./features/feeds/feed.routes').then(r => r.feedRoutes)
             },
             {
+                path: 'profile',
+                loadChildren: () => import('./features/profile/profile.routes').then(r => r.profileRoutes)
+            },
+            {
                 path: '',
                 redirectTo: 'feed',
                 pathMatch: 'full'
