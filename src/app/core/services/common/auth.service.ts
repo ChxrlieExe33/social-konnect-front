@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
-import {BehaviorSubject, Subject, tap} from 'rxjs';
+import {BehaviorSubject, tap} from 'rxjs';
 import {Auth} from '../../models/auth.model';
 
 type AuthResponse = {
@@ -115,6 +115,13 @@ export class AuthService {
 
         return auth!.jwt;
 
+    }
+
+    public getCurrentUsername(): string {
+
+        const auth = this.authentication.value;
+
+        return auth!.username;
     }
 
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Post} from '../../models/post.model';
 import {BehaviorSubject, map, Observable, of, tap} from 'rxjs';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 
 type PostResponse = {
@@ -55,5 +55,22 @@ export class PostService {
 
     }
 
+    getPostsByUsername(username: string): Observable<Post[]> {
+
+        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post/user/${username}`,).pipe(
+            map(res => res.content),
+            tap({
+                error: (err : HttpErrorResponse) => {
+                    // Check to make sure the body of the custom error dto was actually sent
+                    if (err.error && typeof err.error === 'object') {
+                        console.log(err.error);
+                    } else {
+                        console.log(err.message);
+                    }
+                }
+            })
+        );
+
+    }
 
 }

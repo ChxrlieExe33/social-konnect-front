@@ -1,15 +1,15 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {PostComponent} from '../../../../shared/components/post/post.component';
 import {Post} from '../../../../core/models/post.model';
 import {PostService} from '../../../../core/services/common/post.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import { takeUntil } from 'rxjs';
 import { AutoDestroyService } from '../../../../core/services/utils/auto-destroy.service';
+import {PostListComponent} from '../../../../shared/components/post-list/post-list.component';
 
 @Component({
   selector: 'app-explore-page',
     imports: [
-        PostComponent
+        PostListComponent
     ],
     providers: [AutoDestroyService],
   templateUrl: './explore-page.component.html',

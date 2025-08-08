@@ -10,7 +10,7 @@
 
     <form class="flex flex-col items-center justify-between w-full" (ngSubmit)="submitLogin()" #loginForm>
 
-        <input type="text" name="username" id="username" class="bg-white rounded-xl p-2 m-2 w-[95%]" placeholder="Your username..." [(ngModel)]="username">
+        <input type="text" name="username" id="username" class="bg-white rounded-xl p-2 m-2 w-[95%]" placeholder="Your username or email..." [(ngModel)]="username">
         <input type="password" name="password" id="password" class="bg-white rounded-xl p-2 m-2 w-[95%]" placeholder="Your password..." [(ngModel)]="password">
         <input type="submit" value="Log in." class="bg-cyan-300 rounded-xl p-2 m-2 w-[95%] font-bold cursor-pointer" >
 
