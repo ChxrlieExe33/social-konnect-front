@@ -1,5 +1,15 @@
 <section class="w-full flex flex-col items-center justify-items-start">
 
-    <app-profile-header />
+    @if (loadedProfile()) {
+
+        <app-profile-header [profile]="loadedProfile()!" />
+
+    } @else {
+
+        <h1 class="text-red-600 font-bold text-3xl">{{ error() }}</h1>
+
+    }
+
+
 
 </section>

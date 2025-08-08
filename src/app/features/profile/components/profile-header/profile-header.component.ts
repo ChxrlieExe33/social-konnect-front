@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, input} from '@angular/core';
+import {UserProfile} from '../../../../core/models/user-profile.model';
 
 @Component({
   selector: 'app-profile-header',
@@ -7,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './profile-header.component.css'
 })
 export class ProfileHeaderComponent {
+
+    profile = input.required<UserProfile>();
 
 }
