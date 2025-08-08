@@ -85,7 +85,18 @@ export class AuthService {
         const storedAuth = localStorage.getItem("auth");
 
         if (storedAuth) {
-            return JSON.parse(storedAuth);
+
+            const auth : Auth = JSON.parse(storedAuth);
+
+            const now = new Date();
+
+            // Check if expired
+            if(auth.jwtExp < now) {
+                this.logout();
+            }
+
+            return auth;
+
         } else {
             return null;
         }
