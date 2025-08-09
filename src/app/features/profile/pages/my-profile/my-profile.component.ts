@@ -6,6 +6,7 @@ import {PostService} from '../../../../core/services/common/post.service';
 import {Post} from '../../../../core/models/post.model';
 import {PostListComponent} from '../../../../shared/components/post-list/post-list.component';
 import {AuthService} from '../../../../core/services/common/auth.service';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-my-profile',
@@ -43,12 +44,12 @@ export class MyProfileComponent implements OnInit {
                 this.loadedProfile.set(data);
                 console.log(this.loadedProfile());
             },
-            error: (err) => {
+            error: (err : HttpErrorResponse) => {
                 // Check to make sure the body of the custom error dto was actually sent
-                if (err.error && typeof err.error === 'object') {
-                this.error.set(err.error.message);
+                if (err.error && typeof err.error === 'object' && err.error.message) {
+                    this.error.set(err.error.message);
                 } else {
-                this.error.set("An unknown error has occurred.");
+                    this.error.set("An unknown error has occurred.");
                 }
             }
         });

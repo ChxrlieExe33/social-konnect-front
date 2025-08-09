@@ -1,12 +1,12 @@
 <section class="w-full flex flex-col items-center justify-items-start">
 
+    @if (error()){
+        <h1 class="text-red-800 font-bold text-3xl my-10 p-12">{{ error() }}</h1>
+    }
+
     @if (loadedProfile()) {
 
         <app-profile-header [profile]="loadedProfile()!" />
-
-    } @else {
-
-        <h1 class="text-red-800 font-bold text-3xl my-10 p-12">{{ error() }}</h1>
 
     }
 

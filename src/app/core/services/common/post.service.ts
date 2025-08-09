@@ -3,6 +3,7 @@ import {Post} from '../../models/post.model';
 import {BehaviorSubject, map, Observable, of, tap} from 'rxjs';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
+import {PostMetaData} from '../../models/post-metadata.model';
 
 type PostResponse = {
     content: Post[],
@@ -70,6 +71,18 @@ export class PostService {
                 }
             })
         );
+
+    }
+
+    getPostByPostId(id : string) : Observable<Post> {
+
+        return this.httpClient.get<Post>(`${environment.backendBaseUrl}/api/post/${id}`,).pipe();
+
+    }
+
+    getPostMetadataByPostId(postId: string) : Observable<PostMetaData> {
+
+        return this.httpClient.get<PostMetaData>(`${environment.backendBaseUrl}/api/post/metadata/${postId}`,).pipe()
 
     }
 

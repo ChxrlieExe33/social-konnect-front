@@ -17,6 +17,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./features/profile/profile.routes').then(r => r.profileRoutes)
             },
             {
+                path: 'posts',
+                loadChildren: () => import('./features/posts/post.routes').then(r => r.postRoutes)
+            },
+            {
                 path: '',
                 redirectTo: 'feed',
                 pathMatch: 'full'

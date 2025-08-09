@@ -89,9 +89,10 @@ export class AuthService {
             const auth : Auth = JSON.parse(storedAuth);
 
             const now = new Date();
+            const expiry = new Date(auth.jwtExp);
 
             // Check if expired
-            if(auth.jwtExp < now) {
+            if(expiry < now) {
                 this.logout();
             }
 

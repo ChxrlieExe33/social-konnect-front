@@ -57,10 +57,14 @@ This is going to be the route structure for each
 - /auth
   - /login
   - /register
-- /feed/explore
-- /feed/following
+- /feed
+  - /explore
+  - /following
+- /posts
+  - /detail/:postId
 - /search
 - /create
-- /profile/me
-- /profile/{username}
+- /profile
+  - /me
+  - /{username}
 
