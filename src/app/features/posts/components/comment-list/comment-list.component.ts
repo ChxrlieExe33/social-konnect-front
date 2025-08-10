@@ -30,6 +30,7 @@ export class CommentListComponent implements OnInit {
     protected newCommentError = signal<string | undefined>(undefined);
 
     @Output() createdComment: EventEmitter<void> = new EventEmitter();
+    @Output() deletedComment: EventEmitter<void> = new EventEmitter();
 
 
     constructor(
@@ -109,11 +110,9 @@ export class CommentListComponent implements OnInit {
 
     removeDeletedComment(commentId : string) {
 
-        console.log(this.comments());
-
         this.comments.update(comments => comments.filter((comment) => comment.commentId !== commentId));
 
-        console.log(this.comments());
+        this.deletedComment.emit();
 
     }
 

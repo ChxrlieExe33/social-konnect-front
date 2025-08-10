@@ -33,6 +33,12 @@ export class CommentComponent implements OnInit {
 
     deleteComment() {
 
+        const accepted = confirm('Are you sure you want to delete this comment?');
+
+        if (!accepted) {
+            return;
+        }
+
         this.commentService.deleteComment(this.data().commentId).pipe(takeUntil(this.destroy$)).subscribe({
             next: () => {
                 this.commentDeleted.emit(this.data().commentId);

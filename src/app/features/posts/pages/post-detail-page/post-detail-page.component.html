@@ -2,6 +2,6 @@
 
     <app-post-fullscreen [postData]="postData()!" [postMedia]="postData()!.media" [postMetadata]="postMetadata()!"/>
 
-    <app-comment-list [postId]="postData()!.postId" (createdComment)="increaseCommentCountOnNewComment()"/>
+    <app-comment-list [postId]="postData()!.postId" (createdComment)="increaseCommentCountOnNewComment()" (deletedComment)="decreaseCommentCountWhenDeleteComment()"/>
 
 </section>

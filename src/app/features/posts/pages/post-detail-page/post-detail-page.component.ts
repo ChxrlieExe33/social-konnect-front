@@ -68,6 +68,20 @@ export class PostDetailPageComponent implements OnInit {
             }))
 
         }
+    }
+
+    decreaseCommentCountWhenDeleteComment() {
+
+        if (this.postMetadata()) {
+
+            const prevComments = this.postMetadata()!.comments;
+
+            this.postMetadata.update((meta : PostMetaData) => ({
+                ...meta,
+                comments: prevComments - 1
+            }))
+
+        }
 
     }
 }
