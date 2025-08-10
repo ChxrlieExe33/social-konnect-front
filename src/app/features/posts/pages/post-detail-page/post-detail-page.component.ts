@@ -1,11 +1,13 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {Post} from '../../../../core/models/post.model';
+import {PostMetaData} from '../../../../core/models/post-metadata.model';
 import {ActivatedRoute} from '@angular/router';
 import {PostMedia} from '../../../../core/models/post-media';
 import {PostFullscreenComponent} from '../../components/post-fullscreen/post-fullscreen.component';
 import {PostService} from '../../../../core/services/common/post.service';
-import {PostMetaData} from '../../../../core/models/post-metadata.model';
 import {CommentListComponent} from '../../components/comment-list/comment-list.component';
+import {catchError, map, of, switchMap, takeUntil} from 'rxjs';
+import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
 
 @Component({
   selector: 'app-post-detail-page',
@@ -13,6 +15,7 @@ import {CommentListComponent} from '../../components/comment-list/comment-list.c
         PostFullscreenComponent,
         CommentListComponent
     ],
+    providers: [AutoDestroyService],
   templateUrl: './post-detail-page.component.html',
   styleUrl: './post-detail-page.component.css'
 })
@@ -20,6 +23,7 @@ export class PostDetailPageComponent implements OnInit {
 
     postData = signal<Post | undefined>(undefined);
     postMedia = signal<PostMedia[]>([]);
+    error = signal<string | undefined>(undefined);
 
     postMetadata = signal<PostMetaData>({
         post_id: '',
@@ -27,28 +31,57 @@ export class PostDetailPageComponent implements OnInit {
         comments: 0,
     });
 
-    constructor(private activatedRoute: ActivatedRoute, private postService : PostService) {}
+    constructor(private activatedRoute: ActivatedRoute, private postService : PostService, private destroy$ : AutoDestroyService) {}
 
     ngOnInit() {
 
-        this.subscribeToPostDDataFromResolver()
+        this.getPostDataAndSubscribeToMetadata()
 
     }
 
-    subscribeToPostDDataFromResolver() {
+    getPostDataAndSubscribeToMetadata() {
 
-        this.activatedRoute.data.subscribe(data => {
-            this.postData.set(data['postData']);
-            this.postMedia.set(this.postData()!.media)
-            this.subscribeToPostMetadata();
-        })
+        this.activatedRoute.data.pipe(
+            takeUntil(this.destroy$),
+            switchMap(routeData => {
 
-    }
+                const post : Post = routeData['postData'];
 
-    subscribeToPostMetadata() {
+                this.postData.set(post);
+                this.postMedia.set(post.media);
 
-        this.postService.getPostMetadataByPostId(this.postData()!.postId).subscribe(data => {
-            this.postMetadata.set(data);
+                return this.postService.getPostMetadataByPostId(post.postId).pipe(
+                    takeUntil(this.destroy$),
+                    map(metadata => ({post, metadata})),
+                    catchError(err => {
+
+                        if (err.error && typeof err.error === 'object' && err.error.message) {
+                            console.log(err.error.message);
+                            this.error.set(err.error.message);
+                        } else {
+                            console.log(err);
+                            this.error.set("Something went wrong, please try again later.");
+                        }
+
+                        return of({post, metadata : null});
+
+                    })
+                );
+            })
+        ).subscribe({
+            next: ({post, metadata}) => {
+
+                if(metadata) {
+                    this.postMetadata.set(metadata);
+                }
+
+                console.log("Post data and post metadata set!");
+                console.log(post);
+                console.log(metadata);
+            },
+            error: err => {
+
+            }
         })
 
     }

@@ -1,7 +1,16 @@
 <section class="flex flex-col items-center justify-center">
 
-    <app-post-fullscreen [postData]="postData()!" [postMedia]="postData()!.media" [postMetadata]="postMetadata()!"/>
+    @if(error()){
 
-    <app-comment-list [postId]="postData()!.postId" (createdComment)="increaseCommentCountOnNewComment()" (deletedComment)="decreaseCommentCountWhenDeleteComment()"/>
+        <p class="text-red-800 text-2xl">{{ error() }}</p>
+    }
+
+    @if (postData()) {
+
+        <app-post-fullscreen [postData]="postData()!" [postMedia]="postData()!.media" [postMetadata]="postMetadata()!"/>
+
+        <app-comment-list [postId]="postData()!.postId" (createdComment)="increaseCommentCountOnNewComment()" (deletedComment)="decreaseCommentCountWhenDeleteComment()"/>
+
+    }
 
 </section>
