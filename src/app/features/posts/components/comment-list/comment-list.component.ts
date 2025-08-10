@@ -1,4 +1,4 @@
-import {Component, input, OnInit, signal} from '@angular/core';
+import {Component, EventEmitter, input, OnInit, Output, signal} from '@angular/core';
 import {CommentService} from '../../services/comment.service';
 import { Comment } from '../../../../core/models/comment.model';
 import { CreateCommentDTO } from '../../../../core/models/new-comment';
@@ -27,6 +27,10 @@ export class CommentListComponent implements OnInit {
     postId = input.required<string>();
 
     protected newCommentContent = signal<string>('');
+    protected newCommentError = signal<string | undefined>(undefined);
+
+    @Output() createdComment: EventEmitter<void> = new EventEmitter();
+
 
     constructor(
         private commentService: CommentService,
@@ -67,17 +71,49 @@ export class CommentListComponent implements OnInit {
 
     submitNewComment(form: HTMLFormElement) {
 
+        this.newCommentError.set(undefined);
+
         const dto : CreateCommentDTO = {
             content: this.newCommentContent(),
             post_id: this.postId()
         }
 
+        if (this.newCommentContent().length < 1) {
+
+            this.newCommentError.set("Your comment must be at least 1 character.");
+            return;
+
+        }
+
         this.commentService.createNewComment(dto).pipe(takeUntil(this.destroy$)).subscribe({
             next: comment => {
                 this.comments.set([comment, ...this.comments()])
+                this.createdComment.emit();
                 form.reset()
+            },
+            error: err => {
+
+                // Check to make sure the body of the custom error dto was actually sent
+                if (err.error && typeof err.error === 'object' && err.error.message) {
+                    console.log(err.error.message);
+                    this.newCommentError.set(err.error.message);
+                } else {
+                    console.log(err);
+                    this.newCommentError.set("Something went wrong when posting your comment, please try again later.");
+                }
+
             }
         })
+
+    }
+
+    removeDeletedComment(commentId : string) {
+
+        console.log(this.comments());
+
+        this.comments.update(comments => comments.filter((comment) => comment.commentId !== commentId));
+
+        console.log(this.comments());
 
     }
 

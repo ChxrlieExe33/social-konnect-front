@@ -38,4 +38,10 @@ export class CommentService {
 
     }
 
+    deleteComment(id: string) : Observable<void> {
+
+        return this.httpClient.delete<void>(`${environment.backendBaseUrl}/api/comment/${id}`)
+
+    }
+
 }

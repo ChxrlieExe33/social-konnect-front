@@ -1,18 +1,24 @@
-<section class="flex flex-col items-center justify-items-start border-t-1">
+<section class="flex flex-col items-center justify-items-start border-t-1 bg-white">
 
     <form class="w-full bg-white h-auto p-5 flex items-start justify-items-start gap-4" (ngSubmit)="submitNewComment(formElement)" #formElement>
 
-        <b class="min-w-[5%] p-2">{{ currentUsername() }}</b>
+        <b class="min-w-[5%] p-2 hidden md:block">{{ currentUsername() }}</b>
 
-        <textarea type="text" placeholder="Add a comment..." class="w-[60%] p-2 field-sizing-content border-1 rounded-2xl" name="content" [(ngModel)]="newCommentContent"></textarea>
+        <textarea type="text" placeholder="Add a comment..." class="w-[75%] md:w-[60%] p-2 field-sizing-content border-1 rounded-2xl" name="content" [(ngModel)]="newCommentContent"></textarea>
 
         <button type="submit" class="py-2 px-5 bg-slate-200 rounded-2xl font-bold cursor-pointer">Post</button>
 
     </form>
 
+    @if (newCommentError()) {
+
+        <p class="text-red-800 text-xl font-bold p-5 bg-white">{{ newCommentError() }}</p>
+
+    }
+
     @for (comment of comments(); track comment.commentId) {
 
-        <app-comment [data]="comment" />
+        <app-comment [data]="comment" (commentDeleted)="removeDeletedComment($event)"/>
 
     }
 

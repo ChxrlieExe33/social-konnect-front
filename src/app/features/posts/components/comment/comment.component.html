@@ -1,12 +1,18 @@
 <div class="p-5 bg-white w-full flex flex-col items-start justify-center gap-2">
 
-    <span class="flex items-start justify-items-start gap-4">
+    <span class="flex items-start justify-items-start gap-4 w-full">
 
         <img class="h-8 w-8 min-w-8 rounded-full" [src]="data().profilePictureUrl" [alt]="'Profile picture of ' + data().username"/>
 
         <b>{{ data().username }}</b>
 
         <p class="hidden md:block">{{ data().content }}</p>
+
+        @if (commentOwnedByCurrentUser()) {
+
+            <button class="px-2 rounded-2xl text-red-600 font-bold ml-auto cursor-pointer" (click)="deleteComment()">Delete</button>
+
+        }
 
     </span>
 

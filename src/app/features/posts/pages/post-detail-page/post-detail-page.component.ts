@@ -20,7 +20,12 @@ export class PostDetailPageComponent implements OnInit {
 
     postData = signal<Post | undefined>(undefined);
     postMedia = signal<PostMedia[]>([]);
-    postMetadata = signal<PostMetaData | undefined>(undefined);
+
+    postMetadata = signal<PostMetaData>({
+        post_id: '',
+        likes: 0,
+        comments: 0,
+    });
 
     constructor(private activatedRoute: ActivatedRoute, private postService : PostService) {}
 
@@ -45,6 +50,24 @@ export class PostDetailPageComponent implements OnInit {
         this.postService.getPostMetadataByPostId(this.postData()!.postId).subscribe(data => {
             this.postMetadata.set(data);
         })
+
+    }
+
+    /**
+     * Triggered when a new comment created successfully event happens in the comment list.
+     */
+    increaseCommentCountOnNewComment() {
+
+        if (this.postMetadata()) {
+
+            const prevComments = this.postMetadata()!.comments;
+
+            this.postMetadata.update((meta : PostMetaData) => ({
+                ...meta,
+                comments: prevComments + 1
+            }))
+
+        }
 
     }
 }
