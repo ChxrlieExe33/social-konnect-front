@@ -17,7 +17,6 @@ export class PostComponent implements OnInit {
     constructor(private router: Router){}
 
     ngOnInit(): void {
-        console.log(this.postData());
 
         if(this.postData().media){
             this.postMedia!.set(this.postData().media);

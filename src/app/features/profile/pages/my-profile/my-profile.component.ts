@@ -42,7 +42,6 @@ export class MyProfileComponent implements OnInit {
         this.userService.getCurrentUser().subscribe({
             next: (data) => {
                 this.loadedProfile.set(data);
-                console.log(this.loadedProfile());
             },
             error: (err : HttpErrorResponse) => {
                 // Check to make sure the body of the custom error dto was actually sent
