@@ -7,6 +7,7 @@ import {Post} from '../../../../core/models/post.model';
 import {PostListComponent} from '../../../../shared/components/post-list/post-list.component';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
 
 @Component({
   selector: 'app-my-profile',
@@ -22,7 +23,7 @@ export class MyProfileComponent implements OnInit {
     loadedProfile = signal<UserProfile | undefined>(undefined);
     error = signal<string | undefined>(undefined);
 
-    userPosts = signal<Post[]>([]);
+    userPosts = signal<PostWithLikedByMe[]>([]);
 
     constructor(
         private userService: UserService,

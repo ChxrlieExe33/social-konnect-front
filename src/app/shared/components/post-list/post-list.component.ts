@@ -1,6 +1,6 @@
 import {Component, input} from '@angular/core';
-import {Post} from '../../../core/models/post.model';
 import {PostComponent} from '../post/post.component';
+import {PostWithLikedByMe} from '../../../core/models/post-with-liked.model';
 
 @Component({
   selector: 'app-post-list',
@@ -12,7 +12,7 @@ import {PostComponent} from '../post/post.component';
 })
 export class PostListComponent {
 
-    posts = input.required<Post[]>();
+    posts = input.required<PostWithLikedByMe[]>();
     listTitle = input<string | undefined>(undefined);
     error = input<string | undefined>(undefined);
 

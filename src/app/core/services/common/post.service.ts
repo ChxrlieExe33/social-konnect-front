@@ -4,9 +4,10 @@ import {BehaviorSubject, map, Observable, of, tap} from 'rxjs';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {PostMetaData} from '../../models/post-metadata.model';
+import {PostWithLikedByMe} from '../../models/post-with-liked.model';
 
 type PostResponse = {
-    content: Post[],
+    content: PostWithLikedByMe[],
     page: {
         number: number,
         size: number,
@@ -20,14 +21,14 @@ type PostResponse = {
 })
 export class PostService {
 
-    private loadedPosts = new BehaviorSubject<Post[]>([]);
+    private loadedPosts = new BehaviorSubject<PostWithLikedByMe[]>([]);
     public loadedPosts$ = this.loadedPosts.asObservable();
 
     constructor(private httpClient : HttpClient) { }
 
-    getExplorePosts(): Observable<Post[]> {
+    getExplorePosts(): Observable<PostWithLikedByMe[]> {
 
-        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post`,).pipe(
+        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post/all-with-liked-check`,).pipe(
             tap({
                 next: (res) =>  {
                     this.loadedPosts.next(res.content);
@@ -40,7 +41,7 @@ export class PostService {
 
     }
 
-    getExplorePostsIfEmpty(): Observable<Post[]> {
+    getExplorePostsIfEmpty(): Observable<PostWithLikedByMe[]> {
 
         const currentPosts = this.loadedPosts.value;
 
@@ -56,9 +57,9 @@ export class PostService {
 
     }
 
-    getPostsByUsername(username: string): Observable<Post[]> {
+    getPostsByUsername(username: string): Observable<PostWithLikedByMe[]> {
 
-        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post/user/${username}`,).pipe(
+        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post/by-username-with-liked-check/${username}`,).pipe(
             map(res => res.content),
             tap({
                 error: (err : HttpErrorResponse) => {
@@ -74,6 +75,7 @@ export class PostService {
 
     }
 
+    // TODO: This endpoint doesn't support the liked check yet, need to add it.
     getPostByPostId(id : string) : Observable<Post> {
 
         return this.httpClient.get<Post>(`${environment.backendBaseUrl}/api/post/${id}`,).pipe();

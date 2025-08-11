@@ -5,6 +5,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import { takeUntil } from 'rxjs';
 import { AutoDestroyService } from '../../../../core/services/utils/auto-destroy.service';
 import {PostListComponent} from '../../../../shared/components/post-list/post-list.component';
+import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
 
 @Component({
   selector: 'app-explore-page',
@@ -17,7 +18,7 @@ import {PostListComponent} from '../../../../shared/components/post-list/post-li
 })
 export class ExplorePageComponent implements OnInit {
 
-    loadedPosts = signal<Post[]>([]);
+    loadedPosts = signal<PostWithLikedByMe[]>([]);
     error = signal<string>('');
 
     protected readonly destroy$: AutoDestroyService = inject(AutoDestroyService);
