@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {BehaviorSubject, tap} from 'rxjs';
 import {Auth} from '../../models/auth.model';
+import {Router} from '@angular/router';
 
 type AuthResponse = {
     message: string,
@@ -25,7 +26,7 @@ export class AuthService {
     private authentication = new BehaviorSubject<Auth | null>(this.retrieveAuthFromStorage());
     public authentication$ = this.authentication.asObservable();
 
-    constructor(private httpClient : HttpClient) { }
+    constructor(private httpClient : HttpClient, private router: Router) { }
 
     login(username: string, password: string) {
 
@@ -77,6 +78,14 @@ export class AuthService {
         localStorage.removeItem('auth');
 
         this.authentication?.next(null);
+
+        console.log("Redirecting to login...");
+
+        setTimeout(() => {
+            if (this.router.url !== '/auth/login') {
+                this.router.navigate(['/auth', 'login']);
+            }
+        }, 100);
 
     }
 
