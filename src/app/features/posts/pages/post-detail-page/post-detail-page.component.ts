@@ -1,5 +1,4 @@
 import {Component, OnInit, signal} from '@angular/core';
-import {Post} from '../../../../core/models/post.model';
 import {PostMetaData} from '../../../../core/models/post-metadata.model';
 import {ActivatedRoute} from '@angular/router';
 import {PostMedia} from '../../../../core/models/post-media';
@@ -8,6 +7,7 @@ import {PostService} from '../../../../core/services/common/post.service';
 import {CommentListComponent} from '../../components/comment-list/comment-list.component';
 import {catchError, map, of, switchMap, takeUntil} from 'rxjs';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
+import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
 
 @Component({
   selector: 'app-post-detail-page',
@@ -21,7 +21,7 @@ import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.s
 })
 export class PostDetailPageComponent implements OnInit {
 
-    postData = signal<Post | undefined>(undefined);
+    postData = signal<PostWithLikedByMe | undefined>(undefined);
     postMedia = signal<PostMedia[]>([]);
     error = signal<string | undefined>(undefined);
 
@@ -45,7 +45,7 @@ export class PostDetailPageComponent implements OnInit {
             takeUntil(this.destroy$),
             switchMap(routeData => {
 
-                const post : Post = routeData['postData'];
+                const post : PostWithLikedByMe = routeData['postData'];
 
                 this.postData.set(post);
                 this.postMedia.set(post.media);
@@ -112,6 +112,36 @@ export class PostDetailPageComponent implements OnInit {
             this.postMetadata.update((meta : PostMetaData) => ({
                 ...meta,
                 comments: prevComments - 1
+            }))
+
+        }
+
+    }
+
+    increaseLikeCountOnNewLike() {
+
+        if (this.postMetadata()) {
+
+            const prevLikes = this.postMetadata()!.likes;
+
+            this.postMetadata.update((meta : PostMetaData) => ({
+                ...meta,
+                likes: prevLikes + 1
+            }))
+
+        }
+
+    }
+
+    decreaseLikeCountOnRemovedLike() {
+
+        if (this.postMetadata()) {
+
+            const prevLikes = this.postMetadata()!.likes;
+
+            this.postMetadata.update((meta : PostMetaData) => ({
+                ...meta,
+                likes: prevLikes - 1
             }))
 
         }

@@ -7,7 +7,7 @@
 
     @if (postData()) {
 
-        <app-post-fullscreen [postData]="postData()!" [postMedia]="postData()!.media" [postMetadata]="postMetadata()!"/>
+        <app-post-fullscreen [postData]="postData()!" [postMedia]="postData()!.media" [postMetadata]="postMetadata()!" (likeAdded)="increaseLikeCountOnNewLike()" (likeRemoved)="decreaseLikeCountOnRemovedLike()"/>
 
         <app-comment-list [postId]="postData()!.postId" (createdComment)="increaseCommentCountOnNewComment()" (deletedComment)="decreaseCommentCountWhenDeleteComment()"/>
 

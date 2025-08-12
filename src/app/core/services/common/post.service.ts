@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {Post} from '../../models/post.model';
 import {BehaviorSubject, map, Observable, of, tap} from 'rxjs';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
@@ -75,10 +74,10 @@ export class PostService {
 
     }
 
-    // TODO: This endpoint doesn't support the liked check yet, need to add it.
-    getPostByPostId(id : string) : Observable<Post> {
 
-        return this.httpClient.get<Post>(`${environment.backendBaseUrl}/api/post/${id}`,).pipe();
+    getPostByPostId(id : string) : Observable<PostWithLikedByMe> {
+
+        return this.httpClient.get<PostWithLikedByMe>(`${environment.backendBaseUrl}/api/post/with-liked/${id}`,).pipe();
 
     }
 
