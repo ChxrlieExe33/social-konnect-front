@@ -41,7 +41,7 @@ export class ExplorePageComponent implements OnInit {
                     this.error.set(err.error.message);
                 } else {
                     console.log(err);
-                    this.error.set("Something went wrong, please try again later.");
+                    this.error.set("Something went wrong when fetching explore posts, please try again later.");
                 }
 
             }

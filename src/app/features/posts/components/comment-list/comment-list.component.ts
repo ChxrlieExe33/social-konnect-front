@@ -62,7 +62,7 @@ export class CommentListComponent implements OnInit {
                     this.error.set(err.error.message);
                 } else {
                     console.log(err);
-                    this.error.set("Something went wrong, please try again later.");
+                    this.error.set("Something went wrong fetching the comments, please try again later.");
                 }
 
             }

@@ -60,7 +60,7 @@ export class PostDetailPageComponent implements OnInit {
                             this.error.set(err.error.message);
                         } else {
                             console.log(err);
-                            this.error.set("Something went wrong, please try again later.");
+                            this.error.set("Something went wrong when fetching like and comment count, please try again later.");
                         }
 
                         return of({post, metadata : null});
