@@ -1,8 +1,9 @@
 import {Component, EventEmitter, OnInit, Output, signal} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {debounceTime, distinctUntilChanged, exhaustMap, filter, of, Subject, switchMap} from 'rxjs';
+import {debounceTime, distinctUntilChanged, exhaustMap, filter, of, Subject, switchMap, take, takeUntil} from 'rxjs';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {RouterLink} from "@angular/router";
+import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
 
 @Component({
   selector: 'app-register-step1',
@@ -11,6 +12,7 @@ import {RouterLink} from "@angular/router";
         ReactiveFormsModule,
         RouterLink
     ],
+    providers: [AutoDestroyService],
   templateUrl: './register-step1.component.html',
   styleUrl: './register-step1.component.css'
 })
@@ -30,7 +32,7 @@ export class RegisterStep1Component implements OnInit {
     // Sends the username since that is necessary for the next step.
     @Output() moveToNextStepAndPassUsername = new EventEmitter<string>();
 
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService, private destroy$: AutoDestroyService) { }
 
     ngOnInit() {
 
@@ -42,12 +44,13 @@ export class RegisterStep1Component implements OnInit {
     subscribeToSubmit() {
 
         this.submit$.pipe(
+            takeUntil(this.destroy$),
             exhaustMap(() => {
                 return this.authService.submitRegisterStep1({
                     username: this.form.controls.username.value!,
                     email: this.form.controls.email.value!,
                     password: this.form.controls.password.value!
-                })
+                }).pipe(takeUntil(this.destroy$))
             })
         ).subscribe({
             next: (value) => {
@@ -88,6 +91,7 @@ export class RegisterStep1Component implements OnInit {
     subscribeToUsernameChanges() {
 
         this.form.get('username')?.valueChanges.pipe(
+            takeUntil(this.destroy$),
             debounceTime(500),
             distinctUntilChanged(),
             filter(value => !!value && value.trim().length > 0),

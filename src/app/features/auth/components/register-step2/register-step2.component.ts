@@ -1,14 +1,16 @@
 import {Component, input, OnInit, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {exhaustMap, Subject} from 'rxjs';
+import {exhaustMap, Subject, takeUntil} from 'rxjs';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {Router} from '@angular/router';
+import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
 
 @Component({
   selector: 'app-register-step2',
     imports: [
         ReactiveFormsModule
     ],
+    providers: [AutoDestroyService],
   templateUrl: './register-step2.component.html',
   styleUrl: './register-step2.component.css'
 })
@@ -20,11 +22,11 @@ export class RegisterStep2Component implements OnInit {
 
     submit$ = new Subject<void>();
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private authService: AuthService, private router: Router, private destroy$: AutoDestroyService) { }
 
     form = new FormGroup({
         code: new FormControl('', {
-            validators: [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern(/^\d+$/) ],
+            validators: [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern(/^\d+$/) ], // The pattern means only whole numbers allowed.
         })
     })
 
@@ -41,12 +43,13 @@ export class RegisterStep2Component implements OnInit {
     subscribeToSubmit() {
 
         this.submit$.pipe(
+            takeUntil(this.destroy$),
             exhaustMap(val => {
 
                 return this.authService.submitRegisterVerifyCode({
                     username: this.username(),
-                    verification_code: +this.form.controls.code.value!
-                })
+                    verification_code: +this.form.controls.code.value! // The + casts the string to a number
+                }).pipe(takeUntil(this.destroy$))
 
             })
         ).subscribe({

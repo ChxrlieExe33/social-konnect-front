@@ -4,6 +4,7 @@ import {AuthService} from '../services/common/auth.service';
 
 export const addTokenInterceptor : HttpInterceptorFn = (req, next) => {
 
+    // Backend endpoints which should not have a JWT sent to them.
     const authEndpointPrefixes = [
         '/api/auth/login',
         '/api/auth/register',

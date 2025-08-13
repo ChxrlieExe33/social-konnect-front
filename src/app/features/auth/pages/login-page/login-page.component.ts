@@ -2,6 +2,8 @@ import {Component, ElementRef, OnInit, signal, ViewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {Router, RouterLink} from '@angular/router';
+import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
+import {takeUntil} from 'rxjs';
 
 @Component({
     selector: 'app-login-page',
@@ -9,6 +11,7 @@ import {Router, RouterLink} from '@angular/router';
         FormsModule,
         RouterLink
     ],
+    providers: [AutoDestroyService],
     templateUrl: './login-page.component.html',
     styleUrl: './login-page.component.css'
 })
@@ -20,7 +23,7 @@ export class LoginPageComponent implements OnInit {
 
     error = signal<string>('');
 
-    constructor(private authService: AuthService, private router : Router) { }
+    constructor(private authService: AuthService, private router : Router, private destroy$: AutoDestroyService) { }
 
     ngOnInit() {
 
@@ -38,6 +41,7 @@ export class LoginPageComponent implements OnInit {
         this.error.set('');
 
         const auth = this.authService.login(this.username(), this.password())
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 error: err => {
 
