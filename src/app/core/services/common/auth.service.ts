@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
-import {BehaviorSubject, tap} from 'rxjs';
+import {BehaviorSubject, catchError, Observable, of, tap} from 'rxjs';
 import {Auth} from '../../models/auth.model';
 import {Router} from '@angular/router';
+import {RegistrationModel} from '../../models/registration.model';
+import {RegistrationVerifyCodeModel} from '../../models/registration-verify-code.model';
 
 type AuthResponse = {
     message: string,
@@ -15,6 +17,13 @@ type AuthFailure = {
     message: string,
     responseCode: number,
     timestamp: number
+}
+
+type RegisterResponse = {
+    id: number,
+    username: string,
+    email: string,
+    enabledStatus: boolean,
 }
 
 @Injectable({
@@ -70,6 +79,23 @@ export class AuthService {
 
             })
         )
+
+    }
+
+    setAuthenticationAfterRegister(username: string, jwt: string) {
+
+        const expiryDate: Date = new Date();
+        expiryDate.setHours(expiryDate.getHours() + 8);
+
+        const auth : Auth = {
+            username: username,
+            jwt: jwt,
+            jwtExp: expiryDate,
+        }
+
+        this.saveAuthInStorage(auth);
+
+        this.authentication?.next(auth);
 
     }
 
@@ -132,6 +158,34 @@ export class AuthService {
         const auth = this.authentication.value;
 
         return auth!.username;
+    }
+
+    public submitRegisterStep1(registrationData: RegistrationModel): Observable<RegisterResponse> {
+
+        return this.httpClient.post<RegisterResponse>(`${environment.backendBaseUrl}/api/auth/register`, registrationData)
+
+    }
+
+    public submitRegisterVerifyCode(verificationData: RegistrationVerifyCodeModel): Observable<HttpResponse<RegisterResponse>> {
+
+        return this.httpClient.post<RegisterResponse>(`${environment.backendBaseUrl}/api/auth/verify`, verificationData, {observe: "response"})
+
+    }
+
+    public checkIfUsernameTaken(username: string): Observable<boolean | null> {
+
+        return this.httpClient.get<boolean>(`${environment.backendBaseUrl}/api/auth/exists/${username}?_=${Date.now()}`).pipe(
+            tap(value => {
+                console.log(value);
+            }),
+            catchError(error => {
+
+                console.log(error);
+
+                return of(null);
+            })
+        )
+
     }
 
 }

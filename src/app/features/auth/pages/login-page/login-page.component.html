@@ -2,6 +2,8 @@
 
     <h1 class="font-bold text-2xl my-7">Social Konnect</h1>
 
+    <h1 class="font-bold text-2xl my-7">Log in</h1>
+
     @if (error()) {
 
         <p class="text-red-600 font-bold text-xl">{{ error() }}</p>
@@ -15,5 +17,7 @@
         <input type="submit" value="Log in." class="bg-cyan-300 rounded-xl p-2 m-2 w-[95%] font-bold cursor-pointer" >
 
     </form>
+
+    <p class="text-xl p-3">Don't have an account?<a routerLink="/auth/register" class="text-blue-500"> Create one here...</a></p>
 
 </section>

@@ -1,0 +1,43 @@
+<section class="bg-slate-200 flex flex-col items-center justify-between p-4 py-8 rounded-3xl w-[90%] md:w-[40%]">
+
+    <h1 class="font-bold text-2xl my-7">Welcome to Social Konnect</h1>
+
+    <h1 class="font-bold text-2xl my-7">Register</h1>
+
+    @if (error()) {
+
+        <p class="text-red-600 font-bold text-xl">{{ error() }}</p>
+
+    }
+
+    <form class="flex flex-col items-center justify-between w-full" (ngSubmit)="submit$.next()" [formGroup]="form">
+
+        @if (usernameTaken()) {
+            <p class="text-red-800 text-xl">Username is taken</p>
+        }
+
+        <input type="text" name="username" id="username" class="bg-white rounded-xl p-2 m-2 w-[95%]" placeholder="Your desired username..." formControlName="username">
+
+        @if (usernameInvalid) {
+            <p class="text-red-800 text-lg">Username must be between 1 and 50 characters</p>
+        }
+
+        <input type="text" name="email" id="email" class="bg-white rounded-xl p-2 m-2 w-[95%]" placeholder="Your email..." formControlName="email">
+
+        @if (emailInvalid) {
+            <p class="text-red-800 text-lg">Email must be between 3 and 150 characters and it must be a valid email</p>
+        }
+
+        <input type="password" name="password" id="password" class="bg-white rounded-xl p-2 m-2 w-[95%]" placeholder="Your password..." formControlName="password">
+
+        @if (passwordInvalid) {
+            <p class="text-red-800 text-lg">Password must be between 8 and 100 characters</p>
+        }
+
+        <input type="submit" value="Register" class="bg-cyan-300 rounded-xl p-2 m-2 w-[95%] font-bold cursor-pointer" [disabled]="usernameTaken() || form.invalid">
+
+    </form>
+
+    <p class="text-xl p-3">Already have an account?<a routerLink="/auth/login" class="text-blue-500"> log in here...</a></p>
+
+</section>

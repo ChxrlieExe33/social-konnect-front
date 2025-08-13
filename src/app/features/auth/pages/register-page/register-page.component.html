@@ -1,0 +1,13 @@
+@if (currentStep() === 1) {
+
+    <app-register-step1 (moveToNextStepAndPassUsername)="moveToStep2($event)"/>
+
+} @else if (currentStep() === 2) {
+
+    <app-register-step2 [username]="username()"/>
+
+} @else {
+
+    <h1 class="text-red-800 text-2xl">You are on an incorrect step of the register process.</h1>
+
+}

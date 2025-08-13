@@ -1,13 +1,13 @@
-import {Component, ElementRef, OnInit, signal, ViewChild, ViewEncapsulation} from '@angular/core';
-import {FormsModule, NgForm} from '@angular/forms';
+import {Component, ElementRef, OnInit, signal, ViewChild} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {AuthService} from '../../../../core/services/common/auth.service';
-import {Observable} from 'rxjs';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
     selector: 'app-login-page',
     imports: [
-        FormsModule
+        FormsModule,
+        RouterLink
     ],
     templateUrl: './login-page.component.html',
     styleUrl: './login-page.component.css'

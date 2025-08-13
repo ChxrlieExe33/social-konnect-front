@@ -4,15 +4,17 @@ import {AuthService} from '../services/common/auth.service';
 
 export const addTokenInterceptor : HttpInterceptorFn = (req, next) => {
 
-    const authEndpoints = [
-        "/auth/login",
-        "/auth/register",
-    ]
+    const authEndpointPrefixes = [
+        '/api/auth/login',
+        '/api/auth/register',
+        '/api/auth/exists',
+        '/api/auth/verify'
+    ];
 
-    // Check if the request URL matches any auth endpoint
-    const isAuthEndpoint = authEndpoints.some(endpoint =>
-        req.url.includes(endpoint)
-    );
+    const url = new URL(req.url, window.location.origin);
+    const path = url.pathname;
+
+    const isAuthEndpoint = authEndpointPrefixes.some(prefix => path.startsWith(prefix));
 
     // Skip adding auth header for auth endpoints
     if (isAuthEndpoint) {
