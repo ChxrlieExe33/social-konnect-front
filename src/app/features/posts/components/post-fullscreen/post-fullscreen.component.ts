@@ -1,4 +1,4 @@
-import {Component, EventEmitter, input, OnInit, Output, signal} from '@angular/core';
+import {Component, EventEmitter, HostListener, input, OnInit, Output, signal} from '@angular/core';
 import {PostMedia} from '../../../../core/models/post-media';
 import {PostMetaData} from '../../../../core/models/post-metadata.model';
 import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
@@ -28,6 +28,7 @@ export class PostFullscreenComponent implements OnInit {
 
     ngOnInit(): void {
 
+        this.currentMediaIndex = 0;
         this.liked.set(this.postData().liked);
 
     }
@@ -60,6 +61,42 @@ export class PostFullscreenComponent implements OnInit {
 
         }
 
+    }
+
+    // Methods for carousel
+
+    // Add this property to your component class
+    currentMediaIndex = 0;
+
+    // Add these methods to your component class
+
+    nextMedia(): void {
+        if (this.postMedia() && this.currentMediaIndex < this.postMedia().length - 1) {
+            this.currentMediaIndex++;
+        }
+    }
+
+    previousMedia(): void {
+        if (this.currentMediaIndex > 0) {
+            this.currentMediaIndex--;
+        }
+    }
+
+    goToMedia(index: number): void {
+        if (this.postMedia() && index >= 0 && index < this.postMedia().length) {
+            this.currentMediaIndex = index;
+        }
+    }
+
+
+    // Optional: Add keyboard navigation
+    @HostListener('keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'ArrowLeft') {
+            this.previousMedia();
+        } else if (event.key === 'ArrowRight') {
+            this.nextMedia();
+        }
     }
 
 }

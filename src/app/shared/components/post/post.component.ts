@@ -1,4 +1,4 @@
-import {Component, input, OnInit, signal} from '@angular/core';
+import {Component, HostListener, input, OnInit, signal} from '@angular/core';
 import {Post} from '../../../core/models/post.model';
 import {PostMedia} from '../../../core/models/post-media';
 import {Router} from '@angular/router';
@@ -14,7 +14,7 @@ import {LikeService} from '../../../features/posts/services/like.service';
 export class PostComponent implements OnInit {
 
     postData = input.required<PostWithLikedByMe>();
-    postMedia? = signal<PostMedia[]>([]);
+    postMedia = signal<PostMedia[]>([]);
 
     liked = signal<boolean>(false);
 
@@ -24,6 +24,8 @@ export class PostComponent implements OnInit {
     ){}
 
     ngOnInit(): void {
+
+        this.currentMediaIndex = 0;
 
         if(this.postData().media){
             this.postMedia!.set(this.postData().media);
@@ -66,6 +68,42 @@ export class PostComponent implements OnInit {
 
         }
 
+    }
+
+    // Logic for carousel
+
+    // Add this property to your component class
+    currentMediaIndex = 0;
+
+    // Add these methods to your component class
+
+    nextMedia(): void {
+        if (this.postMedia() && this.currentMediaIndex < this.postMedia().length - 1) {
+            this.currentMediaIndex++;
+        }
+    }
+
+    previousMedia(): void {
+        if (this.currentMediaIndex > 0) {
+            this.currentMediaIndex--;
+        }
+    }
+
+    goToMedia(index: number): void {
+        if (this.postMedia() && index >= 0 && index < this.postMedia().length) {
+            this.currentMediaIndex = index;
+        }
+    }
+
+
+    // Optional: Add keyboard navigation
+    @HostListener('keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'ArrowLeft') {
+            this.previousMedia();
+        } else if (event.key === 'ArrowRight') {
+            this.nextMedia();
+        }
     }
 
 }
