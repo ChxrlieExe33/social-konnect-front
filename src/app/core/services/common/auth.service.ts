@@ -174,7 +174,7 @@ export class AuthService {
 
     public checkIfUsernameTaken(username: string): Observable<boolean | null> {
 
-        return this.httpClient.get<boolean>(`${environment.backendBaseUrl}/api/auth/exists/${username}?_=${Date.now()}`).pipe(
+        return this.httpClient.get<boolean>(`${environment.backendBaseUrl}/api/auth/exists/${username}`).pipe(
             tap(value => {
                 console.log(value);
             }),
