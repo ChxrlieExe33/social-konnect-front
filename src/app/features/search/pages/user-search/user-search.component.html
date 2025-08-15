@@ -1,1 +1,33 @@
-<p>user-search works!</p>
+<section class="w-full h-full flex flex-col items-center justify-items-start p-8 gap-4">
+
+    <form class="w-[90%]" [formGroup]="form">
+        <input type="text" placeholder="Enter a username..." id="username" name="username" class="w-full p-4 bg-white rounded-2xl" formControlName="username"/>
+    </form>
+
+    <ul class="flex flex-col items-start justify-items-start rounded-2xl gap-8 py-8 px-20">
+
+        @if (users().length !== 0) {
+
+            @for (user of users(); track user.id) {
+
+                <li class="flex items-center justify-center gap-4 cursor-pointer hover:scale-110 hover:bg-slate-400 p-4 rounded-2xl">
+
+                    <img [src]="user.profilePictureUrl" [alt]="user.username + ' Profile picture'" class="rounded-full w-16 h-16"/>
+
+                    <p  class="text-3xl">&#64;{{ user.username }}</p>
+
+                </li>
+
+            }
+
+        }
+
+    </ul>
+
+    @if (error()) {
+
+        <h1 class="text-2xl font-bold text-red-800">{{ error() }}</h1>
+
+    }
+
+</section>
