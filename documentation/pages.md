@@ -62,8 +62,8 @@ This is going to be the route structure for each
   - /following
 - /posts
   - /detail/:postId
+  - /create
 - /search
-- /create
 - /profile
   - /me
   - /{username}

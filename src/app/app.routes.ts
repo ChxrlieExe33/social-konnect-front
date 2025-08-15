@@ -21,10 +21,14 @@ export const routes: Routes = [
                 loadChildren: () => import('./features/posts/post.routes').then(r => r.postRoutes)
             },
             {
+                path: 'search',
+                loadChildren: () => import('./features/search/search.routes').then(r => r.searchRoutes)
+            },
+            {
                 path: '',
                 redirectTo: 'feed',
                 pathMatch: 'full'
-            }
+            },
         ]
     },
     {

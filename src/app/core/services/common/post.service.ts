@@ -4,6 +4,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {PostMetaData} from '../../models/post-metadata.model';
 import {PostWithLikedByMe} from '../../models/post-with-liked.model';
+import {Post} from '../../models/post.model';
 
 type PostResponse = {
     content: PostWithLikedByMe[],
@@ -74,6 +75,14 @@ export class PostService {
 
     }
 
+    appendCreatedPostToExploreFeed(post: PostWithLikedByMe) {
+
+        const currentPosts = this.loadedPosts.value;
+        const updatedPosts = [post, ...currentPosts];
+
+        this.loadedPosts.next(updatedPosts);
+
+    }
 
     getPostByPostId(id : string) : Observable<PostWithLikedByMe> {
 
@@ -84,6 +93,12 @@ export class PostService {
     getPostMetadataByPostId(postId: string) : Observable<PostMetaData> {
 
         return this.httpClient.get<PostMetaData>(`${environment.backendBaseUrl}/api/post/metadata/${postId}`,).pipe()
+
+    }
+
+    createNewPost(postData: FormData) : Observable<Post> {
+
+        return this.httpClient.post<Post>(`${environment.backendBaseUrl}/api/post`, postData).pipe()
 
     }
 
