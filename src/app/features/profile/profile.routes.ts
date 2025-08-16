@@ -1,6 +1,7 @@
 import {Routes} from '@angular/router';
 import {MyProfileComponent} from './pages/my-profile/my-profile.component';
 import {OtherUserProfileComponent} from './pages/other-user-profile/other-user-profile.component';
+import {EditProfileComponent} from './pages/edit-profile/edit-profile.component';
 
 export const profileRoutes : Routes = [
     {
@@ -10,5 +11,9 @@ export const profileRoutes : Routes = [
     {
         path: 'user/:username',
         component: OtherUserProfileComponent,
+    },
+    {
+        path: 'edit',
+        component: EditProfileComponent
     }
 ]

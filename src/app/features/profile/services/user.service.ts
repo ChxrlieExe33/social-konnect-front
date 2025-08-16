@@ -44,4 +44,10 @@ export class UserService {
 
     }
 
+    updateProfileData(data : FormData) : Observable<UserProfile> {
+
+        return this.httpClient.put<UserProfile>(`${environment.backendBaseUrl}/api/user`, data)
+
+    }
+
 }
