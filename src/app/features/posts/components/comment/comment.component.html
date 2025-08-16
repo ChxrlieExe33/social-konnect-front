@@ -2,9 +2,13 @@
 
     <span class="flex items-start justify-items-start gap-4 w-full">
 
-        <img class="h-8 w-8 min-w-8 rounded-full" [src]="data().profilePictureUrl" [alt]="'Profile picture of ' + data().username"/>
+        <a [routerLink]="'/profile/user/' + data().username">
+            <img class="h-10 w-10 min-w-8 rounded-full" [src]="data().profilePictureUrl" [alt]="'Profile picture of ' + data().username"/>
+        </a>
 
-        <b>{{ data().username }}</b>
+        <a [routerLink]="'/profile/user/' + data().username">
+            <b>{{ data().username }}</b>
+        </a>
 
         <p class="hidden md:block">{{ data().content }}</p>
 

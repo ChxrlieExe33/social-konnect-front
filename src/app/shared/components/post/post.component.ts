@@ -1,13 +1,14 @@
 import {Component, HostListener, input, OnInit, signal} from '@angular/core';
-import {Post} from '../../../core/models/post.model';
 import {PostMedia} from '../../../core/models/post-media';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {PostWithLikedByMe} from '../../../core/models/post-with-liked.model';
 import {LikeService} from '../../../features/posts/services/like.service';
 
 @Component({
   selector: 'app-post',
-  imports: [],
+    imports: [
+        RouterLink
+    ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.css'
 })

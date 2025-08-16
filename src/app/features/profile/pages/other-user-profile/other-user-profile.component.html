@@ -1,0 +1,11 @@
+<section class="w-full flex flex-col items-center justify-items-start">
+
+    @if (loadedProfile()) {
+
+        <app-other-user-profile-header [profile]="loadedProfile()!" />
+
+    }
+
+    <app-post-list [posts]="userPosts()" [error]="error()" />
+
+</section>

@@ -10,11 +10,15 @@
 
             @for (user of users(); track user.id) {
 
-                <li class="flex items-center justify-center gap-4 cursor-pointer hover:scale-110 hover:bg-slate-400 p-4 rounded-2xl">
+                <li>
 
-                    <img [src]="user.profilePictureUrl" [alt]="user.username + ' Profile picture'" class="rounded-full w-16 h-16"/>
+                    <a class="flex items-center justify-center gap-4 cursor-pointer hover:scale-110 hover:bg-slate-400 p-4 rounded-2xl" [routerLink]="'/profile/user/' + user.username">
 
-                    <p  class="text-3xl">&#64;{{ user.username }}</p>
+                        <img [src]="user.profilePictureUrl" [alt]="user.username + ' Profile picture'" class="rounded-full w-16 h-16"/>
+
+                        <p  class="text-3xl">&#64;{{ user.username }}</p>
+
+                    </a>
 
                 </li>
 

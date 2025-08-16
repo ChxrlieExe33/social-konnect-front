@@ -1,14 +1,16 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
-import {catchError, debounceTime, distinctUntilChanged, filter, of, switchMap, takeUntil, throwError} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, filter, of, switchMap, takeUntil} from 'rxjs';
 import {UserService} from '../../../profile/services/user.service';
 import {UserProfile} from '../../../../core/models/user-profile.model';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-user-search',
     imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        RouterLink
     ],
     providers: [AutoDestroyService],
   templateUrl: './user-search.component.html',

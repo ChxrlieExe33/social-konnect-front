@@ -3,10 +3,13 @@ import {PostMedia} from '../../../../core/models/post-media';
 import {PostMetaData} from '../../../../core/models/post-metadata.model';
 import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
 import {LikeService} from '../../services/like.service';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-post-fullscreen',
-  imports: [],
+    imports: [
+        RouterLink
+    ],
   templateUrl: './post-fullscreen.component.html',
   styleUrl: './post-fullscreen.component.css'
 })

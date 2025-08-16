@@ -38,4 +38,10 @@ export class UserService {
 
     }
 
+    getProfileByUsername(username : string) : Observable<UserProfile> {
+
+        return this.httpClient.get<UserProfile>(`${environment.backendBaseUrl}/api/user/${username}`)
+
+    }
+
 }

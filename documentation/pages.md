@@ -66,5 +66,5 @@ This is going to be the route structure for each
 - /search
 - /profile
   - /me
-  - /{username}
+  - /user/{username}
 

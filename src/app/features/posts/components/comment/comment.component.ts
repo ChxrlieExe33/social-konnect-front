@@ -3,12 +3,13 @@ import {Comment} from '../../../../core/models/comment.model';
 import {TimeAgoPipe} from '../../../../core/pipes/time-ago-pipe';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {CommentService} from '../../services/comment.service';
-import {take, takeUntil} from 'rxjs';
+import {takeUntil} from 'rxjs';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-comment',
-  imports: [TimeAgoPipe],
+    imports: [TimeAgoPipe, RouterLink],
     providers: [AutoDestroyService],
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.css'
