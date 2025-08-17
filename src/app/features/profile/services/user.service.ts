@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {map} from 'rxjs/operators';
+import {UserMetadata} from '../../../core/models/user-metadata';
 
 type UserPage = {
     content: UserProfile[],
@@ -47,6 +48,30 @@ export class UserService {
     updateProfileData(data : FormData) : Observable<UserProfile> {
 
         return this.httpClient.put<UserProfile>(`${environment.backendBaseUrl}/api/user`, data)
+
+    }
+
+    getProfileMetadataByUsername(username : string) : Observable<UserMetadata> {
+
+        return this.httpClient.get<UserMetadata>(`${environment.backendBaseUrl}/api/user/metadata/${username}`)
+
+    }
+
+    getMyProfileMetadata() : Observable<UserMetadata> {
+
+        return this.httpClient.get<UserMetadata>(`${environment.backendBaseUrl}/api/user/metadata/me`)
+
+    }
+
+    followUser(username : string) : Observable<void> {
+
+        return this.httpClient.post<void>(`${environment.backendBaseUrl}/api/follow/${username}`, null)
+
+    }
+
+    unfollowUser(username : string) : Observable<void> {
+
+        return this.httpClient.delete<void>(`${environment.backendBaseUrl}/api/follow/${username}`)
 
     }
 

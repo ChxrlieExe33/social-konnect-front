@@ -2,10 +2,14 @@
 
     @if (loadedProfile()) {
 
-        <app-other-user-profile-header [profile]="loadedProfile()!" />
+        <app-other-user-profile-header [profile]="loadedProfile()!" [userMetadata]="userMetadata()!" (followToggled)="toggleFollowing()" [following]="following()"/>
 
     }
 
-    <app-post-list [posts]="userPosts()" [error]="error()" />
+    @if (userPosts()){
+
+        <app-post-list [posts]="userPosts()!" [error]="error()" />
+
+    }
 
 </section>

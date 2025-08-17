@@ -1,6 +1,6 @@
-import {Component, input} from '@angular/core';
+import {Component, EventEmitter, input, Output} from '@angular/core';
 import {UserProfile} from '../../../../core/models/user-profile.model';
-import {environment} from '../../../../../environments/environment';
+import {UserMetadata} from '../../../../core/models/user-metadata';
 
 @Component({
   selector: 'app-other-user-profile-header',
@@ -11,6 +11,10 @@ import {environment} from '../../../../../environments/environment';
 export class OtherUserProfileHeaderComponent {
 
     profile = input.required<UserProfile>();
+    userMetadata = input.required<UserMetadata>();
+    following = input.required<boolean>();
+
+    @Output() followToggled: EventEmitter<void> = new EventEmitter();
 
     async shareProfile() {
 
@@ -47,6 +51,12 @@ export class OtherUserProfileHeaderComponent {
         } catch (err : any) {
             console.log('Error sharing:', err);
         }
+
+    }
+
+    toggleFollow() {
+
+        this.followToggled.emit();
 
     }
 

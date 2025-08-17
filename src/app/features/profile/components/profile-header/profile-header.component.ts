@@ -3,6 +3,7 @@ import {UserProfile} from '../../../../core/models/user-profile.model';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {RouterLink} from '@angular/router';
 import {environment} from '../../../../../environments/environment';
+import {UserMetadata} from '../../../../core/models/user-metadata';
 
 @Component({
   selector: 'app-profile-header',
@@ -15,6 +16,7 @@ import {environment} from '../../../../../environments/environment';
 export class ProfileHeaderComponent {
 
     profile = input.required<UserProfile>();
+    userMetadata = input.required<UserMetadata>();
 
     constructor(private authService: AuthService) {}
 

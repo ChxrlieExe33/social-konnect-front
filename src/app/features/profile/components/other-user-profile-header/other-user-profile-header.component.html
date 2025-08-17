@@ -14,9 +14,15 @@
 
         <span class="flex items-center justify-evenly gap-4">
 
-            <p><b>X</b> Posts</p>
-            <p><b>XXX</b> Followers</p>
-            <p><b>XXX</b> Following</p>
+            @if (userMetadata()) {
+
+                <p><b>{{ userMetadata().posts }}</b> Posts</p>
+                <p><b>{{ userMetadata().followers }}</b> Followers</p>
+                <p><b>{{ userMetadata().following }}</b> Following</p>
+
+            } @else {
+                <p class="text-red-800 text-xl">Could not load user metadata</p>
+            }
 
         </span>
 
@@ -24,7 +30,13 @@
 
         <span class="flex items-center justify-evenly gap-4">
 
-            <button class="py-2 px-4 rounded-xl bg-slate-200 font-bold cursor-pointer hover:scale-110">Follow</button>
+
+            @if (following()) {
+                <button class="py-2 px-4 rounded-xl bg-slate-500 font-bold cursor-pointer hover:scale-110" (click)="toggleFollow()">Following</button>
+            } @else {
+                <button class="py-2 px-4 rounded-xl bg-slate-200 font-bold cursor-pointer hover:scale-110" (click)="toggleFollow()">Follow</button>
+            }
+
             <button class="py-2 px-4 rounded-xl bg-slate-200 font-bold cursor-pointer hover:scale-110" (click)="shareProfile()">Share</button>
 
         </span>

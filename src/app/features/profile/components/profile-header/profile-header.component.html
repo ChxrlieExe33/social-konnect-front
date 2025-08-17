@@ -14,9 +14,15 @@
 
         <span class="flex items-center justify-evenly gap-4">
 
-            <p><b>X</b> Posts</p>
-            <p><b>XXX</b> Followers</p>
-            <p><b>XXX</b> Following</p>
+            @if (userMetadata()) {
+
+                <p><b>{{ userMetadata().posts }}</b> Posts</p>
+                <p><b>{{ userMetadata().followers }}</b> Followers</p>
+                <p><b>{{ userMetadata().following }}</b> Following</p>
+
+            } @else {
+                <p class="text-red-800 text-xl">Could not load user metadata</p>
+            }
 
         </span>
 

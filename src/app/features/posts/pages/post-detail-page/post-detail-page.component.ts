@@ -74,10 +74,6 @@ export class PostDetailPageComponent implements OnInit {
                 if(metadata) {
                     this.postMetadata.set(metadata);
                 }
-
-                console.log("Post data and post metadata set!");
-                console.log(post);
-                console.log(metadata);
             },
             error: err => {
 

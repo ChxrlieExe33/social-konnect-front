@@ -1,5 +1,5 @@
 import {Component, OnInit, signal} from '@angular/core';
-import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
 import {catchError, debounceTime, distinctUntilChanged, filter, of, switchMap, takeUntil} from 'rxjs';
 import {UserService} from '../../../profile/services/user.service';
@@ -19,7 +19,7 @@ import {RouterLink} from '@angular/router';
 export class UserSearchComponent implements OnInit {
 
     protected form = new FormGroup({
-        username: new FormControl(''),
+        username: new FormControl('', {validators: [Validators.maxLength(254)]}),
     })
 
     protected users = signal<UserProfile[]>([]);
