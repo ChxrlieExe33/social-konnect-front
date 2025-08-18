@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable, signal} from '@angular/core';
 import {BehaviorSubject, map, Observable, of, tap} from 'rxjs';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {PostMetaData} from '../../models/post-metadata.model';
 import {PostWithLikedByMe} from '../../models/post-with-liked.model';
@@ -21,17 +21,41 @@ type PostResponse = {
 })
 export class PostService {
 
-    private loadedPosts = new BehaviorSubject<PostWithLikedByMe[]>([]);
-    public loadedPosts$ = this.loadedPosts.asObservable();
+    private loadedExplorePosts = new BehaviorSubject<PostWithLikedByMe[]>([]);
+    public loadedExplorePosts$ = this.loadedExplorePosts.asObservable();
+    public nextExplorePage = signal<number>(0);
+    public nextExplorePageExists = signal<boolean>(true);
 
     constructor(private httpClient : HttpClient) { }
 
     getExplorePosts(): Observable<PostWithLikedByMe[]> {
 
-        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post/all-with-liked-check`,).pipe(
+        // Don't fetch anything if there is no more.
+        if(!this.nextExplorePageExists()){
+            return of([]);
+        }
+
+        const params = new HttpParams()
+            .set('page', this.nextExplorePage())
+
+        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post/all-with-liked-check`, {params}).pipe(
             tap({
                 next: (res) =>  {
-                    this.loadedPosts.next(res.content);
+
+                    const currentPosts = this.loadedExplorePosts.getValue();
+
+                    this.loadedExplorePosts.next([ ...currentPosts, ...res.content]);
+
+                    if (this.nextExplorePage() + 1 === res.page.totalPages ) {
+                        this.nextExplorePageExists.set(false);
+                        console.log("There is no more explore pages")
+                    } else {
+                        this.nextExplorePageExists.set(true);
+                        const currentPage = this.nextExplorePage();
+                        this.nextExplorePage.set(currentPage + 1);
+                        console.log("There is more explore pages")
+                    }
+
                 }
             }),
             map(
@@ -43,7 +67,7 @@ export class PostService {
 
     getExplorePostsIfEmpty(): Observable<PostWithLikedByMe[]> {
 
-        const currentPosts = this.loadedPosts.value;
+        const currentPosts = this.loadedExplorePosts.value;
 
         if (currentPosts.length === 0) {
 
@@ -57,10 +81,12 @@ export class PostService {
 
     }
 
-    getPostsByUsername(username: string): Observable<PostWithLikedByMe[]> {
+    getPostsByUsername(username: string, page: number): Observable<PostResponse> {
 
-        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post/by-username-with-liked-check/${username}`,).pipe(
-            map(res => res.content),
+        const params = new HttpParams()
+            .set('page', page)
+
+        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/post/by-username-with-liked-check/${username}`, {params}).pipe(
             tap({
                 error: (err : HttpErrorResponse) => {
                     // Check to make sure the body of the custom error dto was actually sent
@@ -77,10 +103,10 @@ export class PostService {
 
     appendCreatedPostToExploreFeed(post: PostWithLikedByMe) {
 
-        const currentPosts = this.loadedPosts.value;
+        const currentPosts = this.loadedExplorePosts.value;
         const updatedPosts = [post, ...currentPosts];
 
-        this.loadedPosts.next(updatedPosts);
+        this.loadedExplorePosts.next(updatedPosts);
 
     }
 

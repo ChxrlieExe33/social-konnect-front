@@ -1,1 +1,1 @@
-<app-post-list [posts]="loadedPosts()" listTitle="Explore" [error]="error()" />
+<app-post-list [posts]="loadedPosts()" listTitle="Explore" [error]="error()" (loadMorePosts)="loadMorePosts$.next()" [displayNextPageButton]="postService.nextExplorePageExists()"/>

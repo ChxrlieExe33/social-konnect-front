@@ -8,7 +8,7 @@
 
     @if (userPosts()){
 
-        <app-post-list [posts]="userPosts()!" [error]="error()" />
+        <app-post-list [posts]="userPosts()!" [error]="error()" [displayNextPageButton]="nextPageExists()"/>
 
     }
 

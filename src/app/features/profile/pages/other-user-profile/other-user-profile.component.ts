@@ -5,7 +5,7 @@ import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
 import {UserService} from '../../services/user.service';
 import {PostService} from '../../../../core/services/common/post.service';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
-import {takeUntil} from 'rxjs';
+import {exhaustMap, filter, Subject, takeUntil} from 'rxjs';
 import {
     OtherUserProfileHeaderComponent
 } from '../../components/other-user-profile-header/other-user-profile-header.component';
@@ -33,6 +33,10 @@ export class OtherUserProfileComponent implements OnInit {
     // Obtained from the route using component input binding.
     username = input.required<string>();
 
+    nextPage = signal<number>(0);
+    nextPageExists = signal<boolean>(true);
+    loadMorePosts$ = new Subject<void>();
+
     constructor(
         private readonly userService: UserService,
         private readonly postService: PostService,
@@ -43,8 +47,9 @@ export class OtherUserProfileComponent implements OnInit {
     ngOnInit() {
 
         this.subscribeToProfileData();
-        this.subscribeToUserPosts();
+        this.subscribeToFirstUserPosts();
         this.subscribeToUserMetadata();
+        this.subscribeToLoadMorePosts();
 
     }
 
@@ -72,14 +77,24 @@ export class OtherUserProfileComponent implements OnInit {
 
     }
 
-    subscribeToUserPosts() {
+    subscribeToFirstUserPosts() {
 
-        this.postService.getPostsByUsername(this.username()).pipe(
+        this.postService.getPostsByUsername(this.username(), 0).pipe(
             takeUntil(this.destroy$),
         ).subscribe({
             next: data => {
 
-                this.userPosts.set(data);
+                this.userPosts.set(data.content);
+
+                if (this.nextPage() + 1 === data.page.totalPages ) {
+                    this.nextPageExists.set(false);
+                    console.log("There is no more pages of " + this.username() + " posts");
+                } else {
+                    this.nextPageExists.set(true);
+                    const currentPage = this.nextPage();
+                    this.nextPage.set(currentPage + 1);
+                    console.log("There is more pages of " + this.username() + " posts")
+                }
 
             },
             error: err => {
@@ -94,6 +109,38 @@ export class OtherUserProfileComponent implements OnInit {
 
             }
         })
+
+    }
+
+    subscribeToLoadMorePosts() {
+
+        this.loadMorePosts$.pipe(
+            takeUntil(this.destroy$),
+            filter(() => this.nextPageExists()), // Don't perform any action if there is no more pages.
+            exhaustMap(() => {
+
+                return this.postService.getPostsByUsername(this.username(), this.nextPage()).pipe(
+                    takeUntil(this.destroy$),
+                )
+            })
+        ).subscribe({
+            next: (data) => {
+
+                if (this.nextPage() + 1 === data.page.totalPages ) {
+                    this.nextPageExists.set(false);
+                    console.log("There is no more explore pages")
+                } else {
+                    this.nextPageExists.set(true);
+                    const currentPage = this.nextPage();
+                    this.nextPage.set(currentPage + 1);
+                    console.log("There is more explore pages")
+                }
+
+                const currentPosts = this.userPosts();
+
+                this.userPosts.set([...currentPosts!, ...data.content]);
+            }
+        });
 
     }
 
@@ -156,7 +203,7 @@ export class OtherUserProfileComponent implements OnInit {
         if (this.following()) {
 
             this.userService.unfollowUser(this.username()).subscribe({
-                next: data => {
+                next: () => {
 
                     this.following.set(false)
                     this.decreaseFollowers();
@@ -177,7 +224,7 @@ export class OtherUserProfileComponent implements OnInit {
         } else {
 
             this.userService.followUser(this.username()).subscribe({
-                next: data => {
+                next: () => {
                     this.following.set(true)
                     this.increaseFollowers();
                 }, error: err => {

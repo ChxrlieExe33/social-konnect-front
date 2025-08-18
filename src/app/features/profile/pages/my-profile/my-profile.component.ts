@@ -9,7 +9,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
 import {UserMetadata} from '../../../../core/models/user-metadata';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
-import {takeUntil} from 'rxjs';
+import {exhaustMap, filter, Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-my-profile',
@@ -29,6 +29,10 @@ export class MyProfileComponent implements OnInit {
 
     error = signal<string | undefined>(undefined);
 
+    nextPage = signal<number>(0);
+    nextPageExists = signal<boolean>(true);
+    loadMorePosts$ = new Subject<void>();
+
     constructor(
         private userService: UserService,
         private postsService: PostService,
@@ -39,8 +43,9 @@ export class MyProfileComponent implements OnInit {
     ngOnInit() {
 
         this.subscribeToProfileData();
-        this.subscribeToPosts();
+        this.subscribeToFirstPosts();
         this.subscribeToUserMetadata();
+        this.subscribeToLoadMorePosts()
 
     }
 
@@ -66,14 +71,24 @@ export class MyProfileComponent implements OnInit {
 
     }
 
-    subscribeToPosts() {
+    subscribeToFirstPosts() {
 
-        this.postsService.getPostsByUsername(this.authService.getCurrentUsername()).pipe(
+        this.postsService.getPostsByUsername(this.authService.getCurrentUsername(), this.nextPage()).pipe(
             takeUntil(this.destroy$),
         ).subscribe({
 
             next: (data) => {
-                this.userPosts.set(data);
+                this.userPosts.set(data.content);
+
+                if (this.nextPage() + 1 === data.page.totalPages ) {
+                    this.nextPageExists.set(false);
+                    console.log("There is no more pages of " + this.authService.getCurrentUsername() + " posts");
+                } else {
+                    this.nextPageExists.set(true);
+                    const currentPage = this.nextPage();
+                    this.nextPage.set(currentPage + 1);
+                    console.log("There is more pages of " + this.authService.getCurrentUsername() + " posts");
+                }
             },
             error: (err) => {
                 // Check to make sure the body of the custom error dto was actually sent
@@ -87,6 +102,38 @@ export class MyProfileComponent implements OnInit {
             }
 
         })
+
+    }
+
+    subscribeToLoadMorePosts() {
+
+        this.loadMorePosts$.pipe(
+            takeUntil(this.destroy$),
+            filter(() => this.nextPageExists()), // Don't perform any action if there is no more pages.
+            exhaustMap(() => {
+
+                return this.postsService.getPostsByUsername(this.authService.getCurrentUsername(), this.nextPage()).pipe(
+                    takeUntil(this.destroy$),
+                )
+            })
+        ).subscribe({
+            next: (data) => {
+
+                if (this.nextPage() + 1 === data.page.totalPages ) {
+                    this.nextPageExists.set(false);
+                    console.log("There is no more explore pages")
+                } else {
+                    this.nextPageExists.set(true);
+                    const currentPage = this.nextPage();
+                    this.nextPage.set(currentPage + 1);
+                    console.log("There is more explore pages")
+                }
+
+                const currentPosts = this.userPosts();
+
+                this.userPosts.set([...currentPosts, ...data.content]);
+            }
+        });
 
     }
 

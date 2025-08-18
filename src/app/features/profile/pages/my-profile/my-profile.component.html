@@ -6,6 +6,6 @@
 
     }
 
-    <app-post-list [posts]="userPosts()" [error]="error()" />
+    <app-post-list [posts]="userPosts()" [error]="error()" (loadMorePosts)="loadMorePosts$.next()" [displayNextPageButton]="nextPageExists()"/>
 
 </section>
