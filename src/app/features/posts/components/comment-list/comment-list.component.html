@@ -22,4 +22,10 @@
 
     }
 
+    @if(nextPageExists()){
+
+        <button class="px-6 py-4 font-bold bg-white rounded-2xl hover:bg-gray-200 hover:scale-110 mb-8" (click)="getMoreComments$.next()">View more comments</button>
+
+    }
+
 </section>

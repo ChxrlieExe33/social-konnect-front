@@ -121,12 +121,12 @@ export class MyProfileComponent implements OnInit {
 
                 if (this.nextPage() + 1 === data.page.totalPages ) {
                     this.nextPageExists.set(false);
-                    console.log("There is no more explore pages")
+                    console.log("There is no more pages of " + this.authService.getCurrentUsername() + " posts");
                 } else {
                     this.nextPageExists.set(true);
                     const currentPage = this.nextPage();
                     this.nextPage.set(currentPage + 1);
-                    console.log("There is more explore pages")
+                    console.log("There is more pages of " + this.authService.getCurrentUsername() + " posts");
                 }
 
                 const currentPosts = this.userPosts();

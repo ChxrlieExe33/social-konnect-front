@@ -3,7 +3,7 @@ import {CommentService} from '../../services/comment.service';
 import { Comment } from '../../../../core/models/comment.model';
 import { CreateCommentDTO } from '../../../../core/models/new-comment';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
-import {takeUntil} from 'rxjs';
+import {exhaustMap, filter, Subject, takeUntil} from 'rxjs';
 import {CommentComponent} from '../comment/comment.component';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {FormsModule} from '@angular/forms';
@@ -32,6 +32,9 @@ export class CommentListComponent implements OnInit {
     @Output() createdComment: EventEmitter<void> = new EventEmitter();
     @Output() deletedComment: EventEmitter<void> = new EventEmitter();
 
+    protected nextPage = signal<number>(0);
+    protected nextPageExists = signal<boolean>(true);
+    protected getMoreComments$ = new Subject<void>();
 
     constructor(
         private commentService: CommentService,
@@ -43,16 +46,27 @@ export class CommentListComponent implements OnInit {
     ngOnInit() {
 
         this.subscribeToComments();
-
+        this.subscribeToGetMoreComments();
         this.currentUsername.set(this.authService.getCurrentUsername());
 
     }
 
     subscribeToComments() {
 
-        this.commentService.getCommentsByPostId(this.postId()).pipe(takeUntil(this.destroy$)).subscribe({
+        this.commentService.getCommentsByPostId(this.postId(), this.nextPage()).pipe(takeUntil(this.destroy$)).subscribe({
             next: comments => {
-                this.comments.set(comments)
+                this.comments.set(comments.content);
+
+                if (this.nextPage() + 1 === comments.page.totalPages){
+
+                    console.log("No more comment pages")
+                    this.nextPageExists.set(false);
+                } else {
+
+                    console.log("There is more comment pages");
+                    const currentPage = this.nextPage();
+                    this.nextPage.set(currentPage + 1);
+                }
             },
             error: err => {
 
@@ -65,6 +79,35 @@ export class CommentListComponent implements OnInit {
                     this.error.set("Something went wrong fetching the comments, please try again later.");
                 }
 
+            }
+        })
+
+    }
+
+    subscribeToGetMoreComments() {
+
+        this.getMoreComments$.pipe(
+            takeUntil(this.destroy$),
+            filter(() => this.nextPageExists()),
+            exhaustMap(() => {
+                return this.commentService.getCommentsByPostId(this.postId(), this.nextPage()).pipe(takeUntil(this.destroy$))
+            })
+        ).subscribe({
+            next: comments => {
+
+                const currentComments = this.comments();
+                this.comments.set([...currentComments, ...comments.content]);
+
+                if (this.nextPage() + 1 === comments.page.totalPages){
+
+                    console.log("No more comment pages")
+                    this.nextPageExists.set(false);
+                } else {
+
+                    console.log("There is more comment pages");
+                    const currentPage = this.nextPage();
+                    this.nextPage.set(currentPage + 1);
+                }
             }
         })
 

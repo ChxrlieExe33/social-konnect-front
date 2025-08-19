@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Comment} from '../../../core/models/comment.model';
 import {environment} from '../../../../environments/environment';
 import {map, Observable} from 'rxjs';
@@ -24,11 +24,11 @@ export class CommentService {
         private httpClient: HttpClient
     ) { }
 
-    getCommentsByPostId(postId: string) : Observable<Comment[]> {
+    getCommentsByPostId(postId: string, page: number) : Observable<CommentResponse> {
 
-        return this.httpClient.get<CommentResponse>(`${environment.backendBaseUrl}/api/comment/${postId}`).pipe(
-            map(response => response.content),
-        );
+        const params = new HttpParams().append('page', page);
+
+        return this.httpClient.get<CommentResponse>(`${environment.backendBaseUrl}/api/comment/${postId}`, {params},);
 
     }
 
