@@ -1,10 +1,15 @@
-<article class="w-full bg-white flex flex-col items-center justify-between pt-5">
+<article class="w-full bg-white flex flex-col items-center justify-between pt-5 pb-4">
 
     <span class="flex items-center justify-between px-5 mb-3 w-full">
 
         <a class="flex items-center justify-items-start cursor-pointer" [routerLink]="'/profile/user/' + postData().username">
 
-            <img class="h-10 w-10 rounded-full" [src]="postData().profilePictureUrl" alt="Profile picture"/>
+            @if (postData().profilePictureUrl) {
+                <img class="h-10 w-10 rounded-full" [src]="postData().profilePictureUrl" alt="Profile picture"/>
+            } @else {
+                <img class="h-10 w-10 rounded-full" src="/anonymous-pfp.webp" alt="Profile picture"/>
+            }
+
             <p class="text-xl font-bold py-2 px-3 hover:scale-110"> {{postData().username}} </p>
 
         </a>
@@ -89,6 +94,12 @@
         </div>
     }
 
+    <!-- If there is no media, display caption where media goes -->
+    @if (!postMedia() || !(postMedia().length > 0)){
+        <p class="self-start p-5"><b>{{ postData().username}}</b> {{ postData().caption }}</p>
+
+    }
+
     <span class="w-full flex items-center justify-items-start px-3 pt-3">
         <!-- Display heart in pink if liked, white if not -->
         @if (liked()) {
@@ -108,6 +119,11 @@
         <p class="self-start px-5 pt-5">Loading likes and comments...</p>
     }
 
-    <p class="self-start p-5"><b>{{ postData().username}}</b> {{ postData().caption }}</p>
+    <!-- If there is media, display caption down here -->
+    @if (postMedia() && postMedia().length > 0){
+
+        <p class="self-start p-5"><b>{{ postData().username}}</b> {{ postData().caption }}</p>
+
+    }
 
 </article>

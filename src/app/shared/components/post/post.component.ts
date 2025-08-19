@@ -10,12 +10,14 @@ import {AuthService} from '../../../core/services/common/auth.service';
 import {exhaustMap, Subject, takeUntil, tap} from 'rxjs';
 import {AutoDestroyService} from '../../../core/services/utils/auto-destroy.service';
 import {PostService} from '../../../core/services/common/post.service';
+import {TimeAgoPipe} from '../../../core/pipes/time-ago-pipe';
 
 @Component({
   selector: 'app-post',
     imports: [
         RouterLink,
-        PostOptionsModalComponent
+        PostOptionsModalComponent,
+        TimeAgoPipe
     ],
     providers: [AutoDestroyService],
   templateUrl: './post.component.html',

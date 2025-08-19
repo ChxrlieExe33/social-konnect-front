@@ -1,8 +1,16 @@
-<article class="w-full flex flex-col md:flex-row items-center justify-around bg-white px-3 md:px-15 py-8 md:py-4">
+<article class="w-full flex flex-col md:flex-row items-center justify-around bg-white px-3 md:px-15 py-8 md:py-4 shadow-lg">
 
     <div class="w-full md:w-[20%] flex justify-around md:justify-center items-center mb-5 md:mb-0">
 
-        <img class="h-20 w-20 md:h-40 md:w-40 rounded-full border-1" [src]="profile().profilePictureUrl" [alt]="profile().username + ' profile picture'">
+        @if (profile().profilePictureUrl) {
+
+            <img class="h-20 w-20 md:h-40 md:w-40 rounded-full" [src]="profile().profilePictureUrl" [alt]="profile().username + ' profile picture'">
+
+        } @else {
+
+            <img class="h-20 w-20 md:h-40 md:w-40 rounded-full" src="/anonymous-pfp.webp" [alt]="profile().username + ' profile picture'">
+
+        }
 
         <h1 class="text-3xl font-bold md:hidden">{{ profile().username }}</h1>
 

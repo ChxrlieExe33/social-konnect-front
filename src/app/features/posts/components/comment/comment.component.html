@@ -3,7 +3,13 @@
     <span class="flex items-start justify-items-start gap-4 w-full">
 
         <a [routerLink]="'/profile/user/' + data().username">
-            <img class="h-10 w-10 min-w-8 rounded-full" [src]="data().profilePictureUrl" [alt]="'Profile picture of ' + data().username"/>
+
+            @if (data().profilePictureUrl) {
+                <img class="h-10 w-10 min-w-8 rounded-full" [src]="data().profilePictureUrl" [alt]="'Profile picture of ' + data().username"/>
+            } @else {
+                <img class="h-10 w-10 min-w-8 rounded-full" src="/anonymous-pfp.webp" [alt]="'Profile picture of ' + data().username"/>
+            }
+
         </a>
 
         <a [routerLink]="'/profile/user/' + data().username">
