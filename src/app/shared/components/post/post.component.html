@@ -1,11 +1,25 @@
 <article class="w-[85vw] lg:w-[40vw] bg-white rounded-2xl flex flex-col items-center justify-between pt-5">
 
-    <a class="flex items-center justify-items-start w-full px-5 mb-3 cursor-pointer" [routerLink]="'/profile/user/' + postData().username">
+    <span class="flex items-center justify-between px-5 mb-3 w-full">
 
-        <img class="h-10 w-10 rounded-full" [src]="postData().profilePictureUrl" alt="Profile picture"/>
-        <p class="text-xl font-bold py-2 px-3 hover:scale-110"> {{postData().username}} </p>
+        <a class="flex items-center justify-items-start cursor-pointer" [routerLink]="'/profile/user/' + postData().username">
 
-    </a>
+            <img class="h-10 w-10 rounded-full" [src]="postData().profilePictureUrl" alt="Profile picture"/>
+            <p class="text-xl font-bold py-2 px-3 hover:scale-110"> {{postData().username}} </p>
+
+        </a>
+
+        @if (!menuOpen()) {
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 hover:scale-110 cursor-pointer" (click)="toggleMenu()">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z" stroke="#000000" stroke-width="0.9600000000000002" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M14 19C14 20.1046 13.1046 21 12 21C10.8954 21 10 20.1046 10 19C10 17.8954 10.8954 17 12 17C13.1046 17 14 17.8954 14 19Z" stroke="#000000" stroke-width="0.9600000000000002" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M14 5C14 6.10457 13.1046 7 12 7C10.8954 7 10 6.10457 10 5C10 3.89543 10.8954 3 12 3C13.1046 3 14 3.89543 14 5Z" stroke="#000000" stroke-width="0.9600000000000002" stroke-linecap="round" stroke-linejoin="round"></path> </g>
+            </svg>
+        }
+
+        @if (menuOpen()) {
+            <app-post-options-modal (closeModal)="toggleMenu()" [postOwnedByCurrentUser]="postOwnedByCurrentUser()" [postId]="postData().postId" (deletePost)="deletePost$.next()"/>
+        }
+
+    </span>
 
     @if (postMedia() && postMedia().length > 0) {
         <div class="relative w-full border-y-1">

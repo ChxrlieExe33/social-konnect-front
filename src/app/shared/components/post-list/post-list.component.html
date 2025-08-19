@@ -6,7 +6,7 @@
 
     @for (post of posts(); track post.postId) {
 
-        <app-post class="mb-3" [postData]="post"/>
+        <app-post class="mb-3" [postData]="post" (removePost)="removePost($event)"/>
 
     }
 

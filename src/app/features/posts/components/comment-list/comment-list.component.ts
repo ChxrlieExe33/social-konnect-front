@@ -57,7 +57,7 @@ export class CommentListComponent implements OnInit {
             next: comments => {
                 this.comments.set(comments.content);
 
-                if (this.nextPage() + 1 === comments.page.totalPages){
+                if (this.nextPage() + 1 === comments.page.totalPages || comments.content.length === 0) {
 
                     console.log("No more comment pages")
                     this.nextPageExists.set(false);

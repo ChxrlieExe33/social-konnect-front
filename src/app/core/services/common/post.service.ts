@@ -128,4 +128,18 @@ export class PostService {
 
     }
 
+    deletePostById(id: string) : Observable<void> {
+
+        return this.httpClient.delete<void>(`${environment.backendBaseUrl}/api/post/${id}`,).pipe();
+
+    }
+
+    // TODO: Once I implement following page, add removal from that feed here too.
+    removePostFromExploreAndFollowingAfterDelete(id: string){
+
+        const updatedExplorePosts = this.loadedExplorePosts.value.filter(post => post.postId !== id);
+        this.loadedExplorePosts.next(updatedExplorePosts);
+
+    }
+
 }
