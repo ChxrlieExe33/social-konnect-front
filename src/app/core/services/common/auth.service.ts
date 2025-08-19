@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {BehaviorSubject, catchError, Observable, of, tap} from 'rxjs';
-import {Auth} from '../../models/auth.model';
+import {Auth} from '../../models/auth/auth.model';
 import {Router} from '@angular/router';
-import {RegistrationModel} from '../../models/registration.model';
-import {RegistrationVerifyCodeModel} from '../../models/registration-verify-code.model';
+import {RegistrationModel} from '../../models/auth/registration.model';
+import {RegistrationVerifyCodeModel} from '../../models/auth/registration-verify-code.model';
 
 type AuthResponse = {
     message: string,

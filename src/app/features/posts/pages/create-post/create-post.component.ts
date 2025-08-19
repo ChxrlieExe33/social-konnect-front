@@ -2,9 +2,9 @@ import {Component, OnInit, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {exhaustMap, Subject} from 'rxjs';
 import {PostService} from '../../../../core/services/common/post.service';
-import {Post} from '../../../../core/models/post.model';
+import {Post} from '../../../../core/models/post/post.model';
 import {map} from 'rxjs/operators';
-import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
+import {PostWithLikedByMe} from '../../../../core/models/post/post-with-liked.model';
 import {Router} from '@angular/router';
 
 @Component({
@@ -54,7 +54,7 @@ export class CreatePostComponent implements OnInit {
 
                 this.postService.appendCreatedPostToExploreFeed(postWithNoLikes);
 
-                this.router.navigate(['/feed', 'explore']);
+                this.router.navigate(['/profile', 'me']);
 
 
             }, error: (err) => {

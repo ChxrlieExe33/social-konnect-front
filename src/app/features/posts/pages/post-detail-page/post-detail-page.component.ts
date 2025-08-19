@@ -1,13 +1,13 @@
 import {Component, OnInit, signal} from '@angular/core';
-import {PostMetaData} from '../../../../core/models/post-metadata.model';
+import {PostMetaData} from '../../../../core/models/post/post-metadata.model';
 import {ActivatedRoute} from '@angular/router';
-import {PostMedia} from '../../../../core/models/post-media';
+import {PostMedia} from '../../../../core/models/post/post-media';
 import {PostFullscreenComponent} from '../../components/post-fullscreen/post-fullscreen.component';
 import {PostService} from '../../../../core/services/common/post.service';
 import {CommentListComponent} from '../../components/comment-list/comment-list.component';
 import {catchError, map, of, switchMap, takeUntil} from 'rxjs';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
-import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
+import {PostWithLikedByMe} from '../../../../core/models/post/post-with-liked.model';
 
 @Component({
   selector: 'app-post-detail-page',

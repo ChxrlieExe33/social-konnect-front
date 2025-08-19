@@ -1,5 +1,5 @@
 import {Component, EventEmitter, input, OnInit, Output, signal} from '@angular/core';
-import {Comment} from '../../../../core/models/comment.model';
+import {Comment} from '../../../../core/models/post/comment.model';
 import {TimeAgoPipe} from '../../../../core/pipes/time-ago-pipe';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {CommentService} from '../../services/comment.service';

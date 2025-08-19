@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Comment} from '../../../core/models/comment.model';
+import {Comment} from '../../../core/models/post/comment.model';
 import {environment} from '../../../../environments/environment';
 import {map, Observable} from 'rxjs';
-import {CreateCommentDTO} from '../../../core/models/new-comment';
+import {CreateCommentDTO} from '../../../core/models/post/new-comment';
 
 type CommentResponse = {
     content: Comment[],

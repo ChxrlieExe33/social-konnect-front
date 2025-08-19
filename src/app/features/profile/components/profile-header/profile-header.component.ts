@@ -1,9 +1,9 @@
 import {Component, input} from '@angular/core';
-import {UserProfile} from '../../../../core/models/user-profile.model';
+import {UserProfile} from '../../../../core/models/user/user-profile.model';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {RouterLink} from '@angular/router';
 import {environment} from '../../../../../environments/environment';
-import {UserMetadata} from '../../../../core/models/user-metadata';
+import {UserMetadata} from '../../../../core/models/user/user-metadata';
 
 @Component({
   selector: 'app-profile-header',

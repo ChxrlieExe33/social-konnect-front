@@ -4,7 +4,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {exhaustMap, Subject, takeUntil} from 'rxjs';
 import { AutoDestroyService } from '../../../../core/services/utils/auto-destroy.service';
 import {PostListComponent} from '../../../../shared/components/post-list/post-list.component';
-import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
+import {PostWithLikedByMe} from '../../../../core/models/post/post-with-liked.model';
 
 @Component({
   selector: 'app-explore-page',

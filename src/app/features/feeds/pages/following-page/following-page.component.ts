@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {PostComponent} from '../../../../shared/components/post/post.component';
-import {Post} from '../../../../core/models/post.model';
+import {Post} from '../../../../core/models/post/post.model';
 
 @Component({
   selector: 'app-following-page',

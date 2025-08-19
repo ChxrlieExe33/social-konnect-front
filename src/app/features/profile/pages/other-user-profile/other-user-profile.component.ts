@@ -1,7 +1,7 @@
 import {Component, input, OnInit, signal} from '@angular/core';
 import {PostListComponent} from '../../../../shared/components/post-list/post-list.component';
-import {UserProfile} from '../../../../core/models/user-profile.model';
-import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
+import {UserProfile} from '../../../../core/models/user/user-profile.model';
+import {PostWithLikedByMe} from '../../../../core/models/post/post-with-liked.model';
 import {UserService} from '../../services/user.service';
 import {PostService} from '../../../../core/services/common/post.service';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
@@ -9,7 +9,7 @@ import {exhaustMap, filter, Subject, takeUntil} from 'rxjs';
 import {
     OtherUserProfileHeaderComponent
 } from '../../components/other-user-profile-header/other-user-profile-header.component';
-import {UserMetadata} from '../../../../core/models/user-metadata';
+import {UserMetadata} from '../../../../core/models/user/user-metadata';
 
 @Component({
   selector: 'app-other-user-profile',

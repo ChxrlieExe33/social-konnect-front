@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {UserProfile} from '../../../core/models/user-profile.model';
+import {UserProfile} from '../../../core/models/user/user-profile.model';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {map} from 'rxjs/operators';
-import {UserMetadata} from '../../../core/models/user-metadata';
+import {UserMetadata} from '../../../core/models/user/user-metadata';
 
 type UserPage = {
     content: UserProfile[],

@@ -2,9 +2,9 @@ import {Injectable, signal} from '@angular/core';
 import {BehaviorSubject, map, Observable, of, tap} from 'rxjs';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
-import {PostMetaData} from '../../models/post-metadata.model';
-import {PostWithLikedByMe} from '../../models/post-with-liked.model';
-import {Post} from '../../models/post.model';
+import {PostMetaData} from '../../models/post/post-metadata.model';
+import {PostWithLikedByMe} from '../../models/post/post-with-liked.model';
+import {Post} from '../../models/post/post.model';
 
 type PostResponse = {
     content: PostWithLikedByMe[],

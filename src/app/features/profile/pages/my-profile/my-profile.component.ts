@@ -1,13 +1,13 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {ProfileHeaderComponent} from '../../components/profile-header/profile-header.component';
-import {UserProfile} from '../../../../core/models/user-profile.model';
+import {UserProfile} from '../../../../core/models/user/user-profile.model';
 import {UserService} from '../../services/user.service';
 import {PostService} from '../../../../core/services/common/post.service';
 import {PostListComponent} from '../../../../shared/components/post-list/post-list.component';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {HttpErrorResponse} from '@angular/common/http';
-import {PostWithLikedByMe} from '../../../../core/models/post-with-liked.model';
-import {UserMetadata} from '../../../../core/models/user-metadata';
+import {PostWithLikedByMe} from '../../../../core/models/post/post-with-liked.model';
+import {UserMetadata} from '../../../../core/models/user/user-metadata';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
 import {exhaustMap, filter, Subject, takeUntil} from 'rxjs';
 

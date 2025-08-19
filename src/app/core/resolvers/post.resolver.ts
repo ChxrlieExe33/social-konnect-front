@@ -2,7 +2,7 @@ import {ResolveFn, Router} from '@angular/router';
 import {catchError, Observable, of} from 'rxjs';
 import {inject} from '@angular/core';
 import {PostService} from '../services/common/post.service';
-import {PostWithLikedByMe} from '../models/post-with-liked.model';
+import {PostWithLikedByMe} from '../models/post/post-with-liked.model';
 
 export const getPostDetailResolver : ResolveFn<PostWithLikedByMe | undefined> = (activatedRoute, routerState) : Observable<PostWithLikedByMe | undefined> => {
 

@@ -3,7 +3,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
 import {catchError, debounceTime, distinctUntilChanged, filter, of, switchMap, takeUntil} from 'rxjs';
 import {UserService} from '../../../profile/services/user.service';
-import {UserProfile} from '../../../../core/models/user-profile.model';
+import {UserProfile} from '../../../../core/models/user/user-profile.model';
 import {RouterLink} from '@angular/router';
 
 @Component({

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, input, Output} from '@angular/core';
-import {UserProfile} from '../../../../core/models/user-profile.model';
-import {UserMetadata} from '../../../../core/models/user-metadata';
+import {UserProfile} from '../../../../core/models/user/user-profile.model';
+import {UserMetadata} from '../../../../core/models/user/user-metadata';
 
 @Component({
   selector: 'app-other-user-profile-header',

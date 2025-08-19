@@ -1,7 +1,7 @@
 import {Component, EventEmitter, HostListener, input, OnInit, Output, signal, ViewContainerRef} from '@angular/core';
-import {PostMedia} from '../../../core/models/post-media';
+import {PostMedia} from '../../../core/models/post/post-media';
 import {Router, RouterLink} from '@angular/router';
-import {PostWithLikedByMe} from '../../../core/models/post-with-liked.model';
+import {PostWithLikedByMe} from '../../../core/models/post/post-with-liked.model';
 import {LikeService} from '../../../features/posts/services/like.service';
 import {
     PostOptionsModalComponent

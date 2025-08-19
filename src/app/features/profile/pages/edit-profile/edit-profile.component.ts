@@ -1,5 +1,5 @@
 import {Component, OnInit, signal} from '@angular/core';
-import {UserProfile} from '../../../../core/models/user-profile.model';
+import {UserProfile} from '../../../../core/models/user/user-profile.model';
 import {UserService} from '../../services/user.service';
 import {FormsModule} from '@angular/forms';
 import {exhaustMap, Subject, takeUntil} from 'rxjs';

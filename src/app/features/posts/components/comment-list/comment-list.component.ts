@@ -1,7 +1,7 @@
 import {Component, EventEmitter, input, OnInit, Output, signal} from '@angular/core';
 import {CommentService} from '../../services/comment.service';
-import { Comment } from '../../../../core/models/comment.model';
-import { CreateCommentDTO } from '../../../../core/models/new-comment';
+import { Comment } from '../../../../core/models/post/comment.model';
+import { CreateCommentDTO } from '../../../../core/models/post/new-comment';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
 import {exhaustMap, filter, Subject, takeUntil} from 'rxjs';
 import {CommentComponent} from '../comment/comment.component';
