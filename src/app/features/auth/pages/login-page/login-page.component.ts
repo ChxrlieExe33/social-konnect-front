@@ -13,7 +13,10 @@ import {takeUntil} from 'rxjs';
     ],
     providers: [AutoDestroyService],
     templateUrl: './login-page.component.html',
-    styleUrl: './login-page.component.css'
+    styleUrl: './login-page.component.css',
+    host: {
+        class: 'bg-gradient-to-r from-blue-300 to-blue-400'
+    }
 })
 export class LoginPageComponent implements OnInit {
 

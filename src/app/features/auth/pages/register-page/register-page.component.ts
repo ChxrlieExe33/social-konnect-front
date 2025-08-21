@@ -13,7 +13,10 @@ import {ActivatedRoute} from '@angular/router';
         RegisterStep2Component
     ],
   templateUrl: './register-page.component.html',
-  styleUrl: './register-page.component.css'
+  styleUrl: './register-page.component.css',
+    host: {
+        class: 'bg-gradient-to-r from-blue-300 to-blue-400'
+    }
 })
 export class RegisterPageComponent implements OnInit {
 

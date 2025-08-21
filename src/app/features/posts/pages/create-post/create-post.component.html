@@ -1,4 +1,4 @@
-<section class="w-full h-[100vh] flex items-center justify-center">
+<section class="w-full h-[100vh] flex items-center justify-center bg-gradient-to-r from-blue-300 to-blue-400">
 
     <form class="w-[90%] lg:w-[60%] p-4 lg:p-12 flex flex-col items-center justify-center bg-white rounded-2xl gap-8" (ngSubmit)="submitted$.next()">
 
@@ -6,7 +6,7 @@
 
         <textarea type="text" placeholder="Caption..." class="w-full p-2 field-sizing-content border-1 rounded-2xl" name="caption" [(ngModel)]="caption" maxlength="254"></textarea>
 
-        <label for="files" class="inline-block cursor-pointer bg-slate-400 p-4 rounded-2xl">
+        <label for="files" class="inline-block cursor-pointer bg-blue-300 p-4 rounded-2xl">
             📂 Select media for your post...
         </label>
         <input type="file" id="files" name="files" class="p-8 border-1 rounded-2xl bg-slate-400" value="Add media..." multiple (change)="onFileSelect($event)" hidden>
@@ -26,7 +26,7 @@
 
         </span>
 
-        <button type="submit" class="p-3 px-6 font-bold bg-slate-400 rounded-2xl">Post</button>
+        <button type="submit" class="p-3 px-6 font-bold bg-blue-300 rounded-2xl">Post</button>
 
         @if (error()) {
 

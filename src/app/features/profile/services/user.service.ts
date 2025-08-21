@@ -75,4 +75,10 @@ export class UserService {
 
     }
 
+    getProfilePictureByUsername(username : string) : Observable<{username: string, profilePictureUrl: string}> {
+
+        return this.httpClient.get<{username: string, profilePictureUrl: string}>(`${environment.backendBaseUrl}/api/user/pfp/${username}`)
+
+    }
+
 }
