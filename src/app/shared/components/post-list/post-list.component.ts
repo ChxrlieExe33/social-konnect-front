@@ -1,4 +1,4 @@
-import {Component, computed, EventEmitter, input, OnInit, Output, signal} from '@angular/core';
+import {Component, EventEmitter, input, OnInit, Output, signal} from '@angular/core';
 import {PostComponent} from '../post/post.component';
 import {PostWithLikedByMe} from '../../../core/models/post/post-with-liked.model';
 import {PostService} from '../../../core/services/common/post.service';
@@ -29,9 +29,7 @@ export class PostListComponent {
 
     removePost(postId : string) {
 
-        const updatedPosts = this.posts().filter(post => post.postId !== postId);
-
-        this.postService.removePostFromExploreAndFollowingAfterDelete(postId);
+        this.postService.removePostFromExploreFeedAfterDelete(postId);
 
         const currentUrl = this.router.url;
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

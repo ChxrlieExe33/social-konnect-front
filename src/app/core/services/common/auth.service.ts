@@ -6,6 +6,7 @@ import {Auth} from '../../models/auth/auth.model';
 import {Router} from '@angular/router';
 import {RegistrationModel} from '../../models/auth/registration.model';
 import {RegistrationVerifyCodeModel} from '../../models/auth/registration-verify-code.model';
+import {PostService} from './post.service';
 
 type AuthResponse = {
     message: string,
@@ -35,7 +36,7 @@ export class AuthService {
     private authentication = new BehaviorSubject<Auth | null>(this.retrieveAuthFromStorage());
     public authentication$ = this.authentication.asObservable();
 
-    constructor(private httpClient : HttpClient, private router: Router) { }
+    constructor(private httpClient : HttpClient, private router: Router, private postService: PostService) { }
 
     login(username: string, password: string) {
 
@@ -51,8 +52,6 @@ export class AuthService {
 
                         const authBody = res.body as AuthResponse;
 
-                        console.log(authBody.expirationDate);
-
                         const auth = <Auth>{
                             username: authBody.username,
                             jwt: res.headers.get("authorization"),
@@ -67,11 +66,10 @@ export class AuthService {
 
                 }, error: (err : HttpErrorResponse) => {
 
-                    // Check to make sure the body of the custom error dto was actually sent
-                    if (err.error && typeof err.error === 'object') {
-                        console.log(err.error);
+                    if (err.error && typeof err.error === 'object' && err.error.message) {
+                        console.warn(err.error.message);
                     } else {
-                        console.log(err.message);
+                        console.warn(err);
                     }
 
 
@@ -104,8 +102,7 @@ export class AuthService {
         localStorage.removeItem('auth');
 
         this.authentication?.next(null);
-
-        console.log("Redirecting to login...");
+        this.postService.emptySavedFeeds();
 
         setTimeout(() => {
             if (this.router.url !== '/auth/login') {
@@ -175,12 +172,9 @@ export class AuthService {
     public checkIfUsernameTaken(username: string): Observable<boolean | null> {
 
         return this.httpClient.get<boolean>(`${environment.backendBaseUrl}/api/auth/exists/${username}`).pipe(
-            tap(value => {
-                console.log(value);
-            }),
             catchError(error => {
 
-                console.log(error);
+                console.warn(error);
 
                 return of(null);
             })

@@ -26,6 +26,11 @@ export class PostService {
     public nextExplorePage = signal<number>(0);
     public nextExplorePageExists = signal<boolean>(true);
 
+    private loadedFollowingPosts = new BehaviorSubject<PostWithLikedByMe[]>([]);
+    public loadedFollowingPosts$ = this.loadedFollowingPosts.asObservable();
+    public nextFollowingPage = signal<number>(0);
+    public nextFollowingPageExists = signal<boolean>(true);
+
     constructor(private httpClient : HttpClient) { }
 
     getExplorePosts(): Observable<PostWithLikedByMe[]> {
@@ -48,12 +53,10 @@ export class PostService {
 
                     if (this.nextExplorePage() + 1 === res.page.totalPages ) {
                         this.nextExplorePageExists.set(false);
-                        console.log("There is no more explore pages")
                     } else {
                         this.nextExplorePageExists.set(true);
                         const currentPage = this.nextExplorePage();
                         this.nextExplorePage.set(currentPage + 1);
-                        console.log("There is more explore pages")
                     }
 
                 }
@@ -72,6 +75,58 @@ export class PostService {
         if (currentPosts.length === 0) {
 
             return this.getExplorePosts();
+
+        } else {
+
+            return of(currentPosts);
+
+        }
+
+    }
+
+    getFollowingPosts(): Observable<PostWithLikedByMe[]> {
+
+        // Don't fetch anything if there is no more.
+        if(!this.nextFollowingPageExists()){
+            return of([]);
+        }
+
+        const params = new HttpParams()
+            .set('page', this.nextFollowingPage())
+
+        return this.httpClient.get<PostResponse>(`${environment.backendBaseUrl}/api/feed/following`, {params}).pipe(
+            tap({
+                next: (res) =>  {
+
+                    const currentPosts = this.loadedFollowingPosts.getValue();
+
+                    this.loadedFollowingPosts.next([ ...currentPosts, ...res.content]);
+
+                    if (this.nextFollowingPage() + 1 === res.page.totalPages ) {
+                        this.nextFollowingPageExists.set(false);
+                    } else {
+                        this.nextFollowingPageExists.set(true);
+                        const currentPage = this.nextFollowingPage();
+                        this.nextFollowingPage.set(currentPage + 1);
+                    }
+
+                }
+            }),
+            map(
+                (res: PostResponse) => res.content
+            )
+        );
+
+    }
+
+    getFollowingPostsIfEmpty(): Observable<PostWithLikedByMe[]> {
+
+
+        const currentPosts = this.loadedFollowingPosts.value;
+
+        if (currentPosts.length === 0) {
+
+            return this.getFollowingPosts();
 
         } else {
 
@@ -134,11 +189,25 @@ export class PostService {
 
     }
 
-    // TODO: Once I implement following page, add removal from that feed here too.
-    removePostFromExploreAndFollowingAfterDelete(id: string){
+    // Only need to remove it from the explore feed as a user's own post won't be present in the following feed.
+    removePostFromExploreFeedAfterDelete(id: string){
 
         const updatedExplorePosts = this.loadedExplorePosts.value.filter(post => post.postId !== id);
         this.loadedExplorePosts.next(updatedExplorePosts);
+
+    }
+
+    // To empty both feeds from state, for example on logout, as the state will still be present on the new login and show the wrong feed otherwise.
+    emptySavedFeeds(): void {
+
+        this.loadedFollowingPosts.next([]);
+        this.loadedExplorePosts.next([]);
+
+        this.nextExplorePageExists.set(true);
+        this.nextFollowingPageExists.set(true);
+
+        this.nextExplorePage.set(0);
+        this.nextFollowingPage.set(0);
 
     }
 

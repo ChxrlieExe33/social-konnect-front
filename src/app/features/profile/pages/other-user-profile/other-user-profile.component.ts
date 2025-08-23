@@ -79,7 +79,7 @@ export class OtherUserProfileComponent implements OnInit {
 
     subscribeToFirstUserPosts() {
 
-        this.postService.getPostsByUsername(this.username(), 0).pipe(
+        this.postService.getPostsByUsername(this.username(), this.nextPage()).pipe(
             takeUntil(this.destroy$),
         ).subscribe({
             next: data => {
@@ -118,7 +118,6 @@ export class OtherUserProfileComponent implements OnInit {
             takeUntil(this.destroy$),
             filter(() => this.nextPageExists()), // Don't perform any action if there is no more pages.
             exhaustMap(() => {
-
                 return this.postService.getPostsByUsername(this.username(), this.nextPage()).pipe(
                     takeUntil(this.destroy$),
                 )

@@ -1,7 +1,1 @@
-<section class="w-full h-full flex flex-col items-center justify-items-start p-5 bg-gradient-to-r from-blue-300 to-blue-400 min-h-[100vh]">
-
-    <h1 class="text-2xl font-bold mb-5">Following</h1>
-
-
-
-</section>
+<app-post-list [posts]="loadedPosts()" listTitle="Following" [error]="error()" (loadMorePosts)="loadMorePosts$.next()" [displayNextPageButton]="postService.nextFollowingPageExists()"/>

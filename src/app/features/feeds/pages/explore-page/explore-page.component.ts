@@ -41,10 +41,10 @@ export class ExplorePageComponent implements OnInit {
 
                 // Check to make sure the body of the custom error dto was actually sent
                 if (err.error && typeof err.error === 'object' && err.error.message) {
-                    console.log(err.error.message);
+                    console.warn(err.error.message);
                     this.error.set(err.error.message);
                 } else {
-                    console.log(err);
+                    console.warn(err);
                     this.error.set("Something went wrong when fetching explore posts, please try again later.");
                 }
 
@@ -77,10 +77,10 @@ export class ExplorePageComponent implements OnInit {
 
                 // Check to make sure the body of the custom error dto was actually sent
                 if (err.error && typeof err.error === 'object' && err.error.message) {
-                    console.log(err.error.message);
+                    console.warn(err.error.message);
                     this.error.set(err.error.message);
                 } else {
-                    console.log(err);
+                    console.warn(err);
                     this.error.set("Something went wrong when fetching explore posts, please try again later.");
                 }
 
