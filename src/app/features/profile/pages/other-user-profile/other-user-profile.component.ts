@@ -10,6 +10,8 @@ import {
     OtherUserProfileHeaderComponent
 } from '../../components/other-user-profile-header/other-user-profile-header.component';
 import {UserMetadata} from '../../../../core/models/user/user-metadata';
+import {AuthService} from '../../../../core/services/common/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-other-user-profile',
@@ -40,11 +42,20 @@ export class OtherUserProfileComponent implements OnInit {
     constructor(
         private readonly userService: UserService,
         private readonly postService: PostService,
+        private readonly authService: AuthService,
+        private readonly router: Router,
         private readonly destroy$: AutoDestroyService
     ) {
     }
 
     ngOnInit() {
+
+        // If it's the current user, go to /profile/me to avoid showing the following button on a user's own profile.
+        if(this.authService.getCurrentUsername() === this.username()){
+
+            this.router.navigate(['/profile', 'me']);
+
+        }
 
         this.subscribeToProfileData();
         this.subscribeToFirstUserPosts();
