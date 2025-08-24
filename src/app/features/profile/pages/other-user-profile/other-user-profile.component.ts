@@ -113,7 +113,9 @@ export class OtherUserProfileComponent implements OnInit {
                 if (err.error && typeof err.error === 'object' && err.error.message) {
                     console.log(err.error.message);
                     this.error.set(err.error.message);
+                    this.nextPageExists.set(false);
                 } else {
+                    this.nextPageExists.set(false);
                     console.log(err);
                     this.error.set("Something went wrong when fetching this profile, please try again later.");
                 }

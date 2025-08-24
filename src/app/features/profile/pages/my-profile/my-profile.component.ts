@@ -93,9 +93,11 @@ export class MyProfileComponent implements OnInit {
             error: (err) => {
                 // Check to make sure the body of the custom error dto was actually sent
                 if (err.error && typeof err.error === 'object' && err.error.message) {
+                    this.nextPageExists.set(false);
                     console.log(err.error.message);
                     this.error.set(err.error.message);
                 } else {
+                    this.nextPageExists.set(false);
                     console.log(err);
                     this.error.set("Something went wrong when fetching explore posts, please try again later.");
                 }

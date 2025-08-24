@@ -81,4 +81,10 @@ export class UserService {
 
     }
 
+    updatePassword(oldPassword: string, newPassword: string) : Observable<void> {
+
+        return this.httpClient.put<void>(`${environment.backendBaseUrl}/api/user/password`, {old_password: oldPassword, new_password: newPassword})
+
+    }
+
 }
