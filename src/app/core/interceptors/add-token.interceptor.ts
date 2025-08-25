@@ -9,7 +9,8 @@ export const addTokenInterceptor : HttpInterceptorFn = (req, next) => {
         '/api/auth/login',
         '/api/auth/register',
         '/api/auth/exists',
-        '/api/auth/verify'
+        '/api/auth/verify',
+        '/api/auth/resetpassword/'
     ];
 
     const url = new URL(req.url, window.location.origin);

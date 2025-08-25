@@ -27,6 +27,11 @@ type RegisterResponse = {
     enabledStatus: boolean,
 }
 
+type ForgotPasswordInitialResponse = {
+    resetId : string,
+    message: string,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -179,6 +184,24 @@ export class AuthService {
                 return of(null);
             })
         )
+
+    }
+
+    public submitForgotPasswordRequest(username: string) : Observable<ForgotPasswordInitialResponse> {
+
+        return this.httpClient.post<ForgotPasswordInitialResponse>(`${environment.backendBaseUrl}/api/auth/resetpassword/${username}`, {})
+
+    }
+
+    public submitForgotPasswordCode(code: string, resetId: string) : Observable<ForgotPasswordInitialResponse> {
+
+        return this.httpClient.post<ForgotPasswordInitialResponse>(`${environment.backendBaseUrl}/api/auth/resetpassword/verify`, {reset_id : resetId, reset_code: code})
+
+    }
+
+    public submitForgotPasswordNewPassword( resetId : string, password: string) : Observable<{message: string}> {
+
+        return this.httpClient.post<{message : string}>(`${environment.backendBaseUrl}/api/auth/resetpassword/submitnew`, {reset_id : resetId, new_password: password})
 
     }
 
