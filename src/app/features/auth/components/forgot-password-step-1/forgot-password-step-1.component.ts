@@ -20,6 +20,7 @@ export class ForgotPasswordStep1Component implements OnInit {
     error = signal<string | undefined>(undefined);
 
     submitted$ = new Subject<void>();
+    loading = signal<boolean>(false);
 
     form = new FormGroup({
         username: new FormControl('', {
@@ -43,7 +44,10 @@ export class ForgotPasswordStep1Component implements OnInit {
 
         this.submitted$.pipe(
             takeUntil(this.destroy$),
-            tap(() => this.error.set(undefined)),
+            tap(() => {
+                this.error.set(undefined);
+                this.loading.set(true);
+            }),
             filter(() => !this.form.invalid),
             exhaustMap(() => {
 
