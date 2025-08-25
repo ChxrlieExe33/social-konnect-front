@@ -59,6 +59,8 @@ export class PostService {
                         this.nextExplorePage.set(currentPage + 1);
                     }
 
+                }, error : (err) => {
+                    this.nextExplorePageExists.set(false);
                 }
             }),
             map(
@@ -110,6 +112,8 @@ export class PostService {
                         this.nextFollowingPage.set(currentPage + 1);
                     }
 
+                }, error : (err) => {
+                    this.nextFollowingPageExists.set(false);
                 }
             }),
             map(
