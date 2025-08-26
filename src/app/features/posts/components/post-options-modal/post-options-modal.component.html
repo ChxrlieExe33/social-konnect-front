@@ -7,6 +7,10 @@
             <button class="text-2xl text-gray-100 hover:text-red-500 hover:scale-105" (click)="doDeletePost()">Delete post</button>
         }
 
+        @if (postOwnedByCurrentUser()) {
+            <a class="text-2xl text-gray-100 hover:text-gray-400 hover:scale-105" [routerLink]="'/posts/update/' + postId()">Edit post</a>
+        }
+
         <button class="text-2xl text-gray-100 hover:text-gray-400 hover:scale-105" (click)="sharePost()">Share</button>
 
         <button (click)="closeModal.emit()">

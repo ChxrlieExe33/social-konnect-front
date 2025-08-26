@@ -187,6 +187,12 @@ export class PostService {
 
     }
 
+    updatePostCaption(caption: string, id: string) : Observable<Post> {
+
+        return this.httpClient.put<Post>(`${environment.backendBaseUrl}/api/post/${id}`, {caption: caption})
+
+    }
+
     deletePostById(id: string) : Observable<void> {
 
         return this.httpClient.delete<void>(`${environment.backendBaseUrl}/api/post/${id}`,).pipe();

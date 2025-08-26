@@ -3,11 +3,19 @@ import {PostDetailPageComponent} from './pages/post-detail-page/post-detail-page
 import {getPostDetailResolver} from '../../core/resolvers/post.resolver';
 import {PostNotFoundComponent} from './pages/post-not-found/post-not-found.component';
 import {CreatePostComponent} from './pages/create-post/create-post.component';
+import {UpdatePostComponent} from './pages/update-post/update-post.component';
 
 export const postRoutes : Routes = [
     {
         path: "detail/:postId",
         component: PostDetailPageComponent,
+        resolve: {
+            postData: getPostDetailResolver
+        }
+    },
+    {
+        path: "update/:postId",
+        component: UpdatePostComponent,
         resolve: {
             postData: getPostDetailResolver
         }

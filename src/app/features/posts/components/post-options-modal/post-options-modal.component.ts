@@ -1,9 +1,12 @@
 import {Component, EventEmitter, input, Output} from '@angular/core';
 import {environment} from '../../../../../environments/environment';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-post-options-modal',
-  imports: [],
+    imports: [
+        RouterLink
+    ],
   templateUrl: './post-options-modal.component.html',
   styleUrl: './post-options-modal.component.css'
 })
