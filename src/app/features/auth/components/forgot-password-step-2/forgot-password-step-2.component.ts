@@ -19,10 +19,14 @@ export class ForgotPasswordStep2Component implements OnInit {
     error = signal<string | undefined>(undefined);
 
     resetId = input.required<string>();
+    writeableResetId = signal<string | undefined>(undefined);
+
+    username = input.required<string>();
 
     submitted$ = new Subject<void>();
+    clickSendNewCode$ = new Subject<void>();
 
-    @Output() moveToStep3 = new EventEmitter<void>();
+    @Output() moveToStep3 = new EventEmitter<string>();
 
     form = new FormGroup({
         code: new FormControl('', {
@@ -37,6 +41,8 @@ export class ForgotPasswordStep2Component implements OnInit {
 
     ngOnInit() {
         this.subscribeToSubmitted()
+        this.subscribeToClickSendNewCode();
+        this.writeableResetId.set(this.resetId());
     }
 
     get codeInvalidFormat() {
@@ -51,7 +57,7 @@ export class ForgotPasswordStep2Component implements OnInit {
             filter(() => !this.form.invalid),
             exhaustMap(() => {
 
-                return this.authService.submitForgotPasswordCode(this.form.controls.code.value!, this.resetId()).pipe(
+                return this.authService.submitForgotPasswordCode(this.form.controls.code.value!, this.writeableResetId()!).pipe(
                     takeUntil(this.destroy$),
                     map(result => ({success: true as const, result: result})),
                     catchError(err => {
@@ -64,7 +70,7 @@ export class ForgotPasswordStep2Component implements OnInit {
 
                 if (data.success) {
 
-                    this.moveToStep3.emit();
+                    this.moveToStep3.emit(this.writeableResetId());
 
                 } else {
 
@@ -77,6 +83,49 @@ export class ForgotPasswordStep2Component implements OnInit {
                         console.warn(err);
                         this.error.set("Something went wrong when verifying your code, please try again.");
                     }
+
+                }
+
+            }
+        })
+
+    }
+
+    subscribeToClickSendNewCode() {
+
+        this.clickSendNewCode$.pipe(
+            takeUntil(this.destroy$),
+            exhaustMap(() => {
+
+                return this.authService.submitForgotPasswordRequest(this.username()).pipe(
+                    takeUntil(this.destroy$),
+                    map((data) => ({success: true as const, data: data})),
+                    catchError(error => {
+                        return of({success: false as const, error: error});
+                    })
+                )
+            })
+        ).subscribe({
+            next: value => {
+
+                if(!value.success) {
+
+                    const err = value.error;
+
+                    // Check to make sure the body of the custom error dto was actually sent
+                    if (err.error && typeof err.error === 'object' && err.error.message) {
+                        console.log(err.error.message);
+                        this.error.set(err.error.message);
+                    } else {
+                        console.log(err);
+                        this.error.set("Something went wrong when sending the code");
+                    }
+
+                } else {
+
+                    const newResetId = value.data.resetId;
+
+                    this.writeableResetId.set(newResetId);
 
                 }
 

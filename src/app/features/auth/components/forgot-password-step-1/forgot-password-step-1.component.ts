@@ -29,6 +29,7 @@ export class ForgotPasswordStep1Component implements OnInit {
     })
 
     @Output() moveToStep2AndPassResetId = new EventEmitter<string>();
+    @Output() username = new EventEmitter<string>();
 
     constructor(
        private readonly authService: AuthService,
@@ -64,6 +65,7 @@ export class ForgotPasswordStep1Component implements OnInit {
 
                 if (data.success) {
 
+                    this.username.emit(this.form.controls.username.value!);
                     this.moveToStep2AndPassResetId.emit(data.result.resetId);
 
                 } else {

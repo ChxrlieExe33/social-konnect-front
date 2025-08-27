@@ -1,9 +1,10 @@
 import {Component, input, OnInit, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {exhaustMap, Subject, takeUntil} from 'rxjs';
+import {catchError, exhaustMap, of, Subject, takeUntil} from 'rxjs';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {Router} from '@angular/router';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-register-step2',
@@ -22,6 +23,8 @@ export class RegisterStep2Component implements OnInit {
 
     submit$ = new Subject<void>();
 
+    clickSendNewCode$ = new Subject<void>();
+
     constructor(private authService: AuthService, private router: Router, private destroy$: AutoDestroyService) { }
 
     form = new FormGroup({
@@ -37,6 +40,7 @@ export class RegisterStep2Component implements OnInit {
     ngOnInit() {
 
         this.subscribeToSubmit()
+        this.subscribeToClickSendNewCode()
 
     }
 
@@ -67,6 +71,43 @@ export class RegisterStep2Component implements OnInit {
                 } else {
                     console.log(err);
                     this.error.set("Something went wrong when registering");
+                }
+
+            }
+        })
+
+    }
+
+    subscribeToClickSendNewCode() {
+
+        this.clickSendNewCode$.pipe(
+            takeUntil(this.destroy$),
+            exhaustMap(() => {
+
+                return this.authService.requestNewRegisterVerificationCode(this.username()).pipe(
+                    takeUntil(this.destroy$),
+                    map(() => ({success: true as const})),
+                    catchError(error => {
+                        return of({success: false as const, error: error});
+                    })
+                )
+            })
+        ).subscribe({
+            next: value => {
+
+                if(!value.success) {
+
+                    const err = value.error;
+
+                    // Check to make sure the body of the custom error dto was actually sent
+                    if (err.error && typeof err.error === 'object' && err.error.message) {
+                        console.log(err.error.message);
+                        this.error.set(err.error.message);
+                    } else {
+                        console.log(err);
+                        this.error.set("Something went wrong when sending the code");
+                    }
+
                 }
 
             }

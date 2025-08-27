@@ -205,4 +205,10 @@ export class AuthService {
 
     }
 
+    public requestNewRegisterVerificationCode(username: string) : Observable<void> {
+
+        return this.httpClient.post<void>(`${environment.backendBaseUrl}/api/auth/send-code-again/${username}`, {})
+
+    }
+
 }

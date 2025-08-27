@@ -25,6 +25,7 @@ export class ForgotPasswordComponent implements OnInit {
     currentStep = signal<1 | 2 | 3>(1);
 
     resetId = signal<string>('');
+    username = signal<string>('');
 
 
     constructor(private readonly activatedRoute : ActivatedRoute) {}
@@ -54,9 +55,15 @@ export class ForgotPasswordComponent implements OnInit {
 
     }
 
-    moveToStep3() {
+    moveToStep3(resetId: string) {
 
         this.currentStep.set(3);
+        this.resetId.set(resetId);
+    }
+
+    recieveUsername(username : string) {
+
+        this.username.set(username);
     }
 
 }
