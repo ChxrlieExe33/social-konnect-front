@@ -1,4 +1,4 @@
-<img src="full_view_profile_page.png" alt="Profile page view">
+<img src="social-konnect-ui.png" alt="Profile page view">
 
 # Social-Konnect frontend
 

@@ -1,6 +1,5 @@
 import {Component, input} from '@angular/core';
 import {UserProfile} from '../../../../core/models/user/user-profile.model';
-import {AuthService} from '../../../../core/services/common/auth.service';
 import {RouterLink} from '@angular/router';
 import {environment} from '../../../../../environments/environment';
 import {UserMetadata} from '../../../../core/models/user/user-metadata';
@@ -18,19 +17,7 @@ export class ProfileHeaderComponent {
     profile = input.required<UserProfile>();
     userMetadata = input.required<UserMetadata>();
 
-    constructor(private authService: AuthService) {}
-
-    protected logOutClicked() {
-
-        const confirmed : boolean = confirm('Are you sure you want to logout?');
-
-        if (confirmed) {
-            this.authService.logout();
-        } else {
-            return;
-        }
-
-    }
+    constructor() {}
 
     async shareProfile() {
 
