@@ -3,7 +3,6 @@ import {FormsModule} from '@angular/forms';
 import {exhaustMap, Subject} from 'rxjs';
 import {PostService} from '../../../../core/services/common/post.service';
 import {Post} from '../../../../core/models/post/post.model';
-import {map} from 'rxjs/operators';
 import {PostWithLikedByMe} from '../../../../core/models/post/post-with-liked.model';
 import {Router} from '@angular/router';
 

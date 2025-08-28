@@ -19,7 +19,7 @@
         <input type="text" name="username" id="username" class="bg-white rounded-xl p-2 m-2 w-[95%]" placeholder="Your desired username..." formControlName="username">
 
         @if (usernameInvalid) {
-            <p class="text-red-800 text-lg">Username must be between 1 and 50 characters</p>
+            <p class="text-red-800 text-lg">Username must be between 1 and 50 characters and contain no white spaces</p>
         }
 
         <input type="text" name="email" id="email" class="bg-white rounded-xl p-2 m-2 w-[95%]" placeholder="Your email..." formControlName="email">

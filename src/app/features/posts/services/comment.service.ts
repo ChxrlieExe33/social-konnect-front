@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Comment} from '../../../core/models/post/comment.model';
 import {environment} from '../../../../environments/environment';
-import {map, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {CreateCommentDTO} from '../../../core/models/post/new-comment';
 
 type CommentResponse = {

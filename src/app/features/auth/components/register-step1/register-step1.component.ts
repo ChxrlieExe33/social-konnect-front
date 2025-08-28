@@ -1,9 +1,10 @@
 import {Component, EventEmitter, OnInit, Output, signal} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {debounceTime, distinctUntilChanged, exhaustMap, filter, of, Subject, switchMap, take, takeUntil} from 'rxjs';
+import {debounceTime, distinctUntilChanged, exhaustMap, filter, Subject, switchMap, takeUntil} from 'rxjs';
 import {AuthService} from '../../../../core/services/common/auth.service';
 import {RouterLink} from "@angular/router";
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
+import {noWhitespaceValidator} from '../../../../core/validators/no-whitespace-validator';
 
 @Component({
   selector: 'app-register-step1',
@@ -24,7 +25,7 @@ export class RegisterStep1Component implements OnInit {
     submit$ = new Subject<void>();
 
     form = new FormGroup({
-        username: new FormControl('',{validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)]}),
+        username: new FormControl('',{validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50), noWhitespaceValidator()]}),
         email: new FormControl('', {validators: [Validators.required, Validators.email, Validators.minLength(3), Validators.maxLength(150)]}),
         password: new FormControl('', {validators: [Validators.required, Validators.minLength(8), Validators.maxLength(100)]}),
     })

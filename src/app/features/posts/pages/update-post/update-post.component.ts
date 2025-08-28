@@ -29,7 +29,6 @@ export class UpdatePostComponent implements OnInit {
     updatedCaption = signal<string>('');
 
     error = signal<string | undefined>(undefined);
-    success = signal<boolean>(false);
 
     submitted$ = new Subject<void>();
 
