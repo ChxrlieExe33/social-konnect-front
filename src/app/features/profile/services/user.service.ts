@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {UserProfile} from '../../../core/models/user/user-profile.model';
-import {Observable} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {map} from 'rxjs/operators';
@@ -8,6 +8,22 @@ import {UserMetadata} from '../../../core/models/user/user-metadata';
 
 type UserPage = {
     content: UserProfile[],
+    page: {
+        number: number,
+        size: number,
+        totalElements: number,
+        totalPages: number
+    }
+}
+
+export type UserSearchResult = {
+    username: string,
+    profilePictureUrl: string,
+    following: boolean,
+}
+
+type UserSearchResultPage = {
+    content: UserSearchResult[],
     page: {
         number: number,
         size: number,
@@ -31,9 +47,9 @@ export class UserService {
 
     }
 
-    searchUsersByUsername(username : string) : Observable<UserProfile[]> {
+    searchUsersByUsername(username : string) : Observable<UserSearchResult[]> {
 
-        return this.httpClient.get<UserPage>(`${environment.backendBaseUrl}/api/user/search/${username}`).pipe(
+        return this.httpClient.get<UserSearchResultPage>(`${environment.backendBaseUrl}/api/user/search/${username}`).pipe(
             map(res => res.content)
         );
 

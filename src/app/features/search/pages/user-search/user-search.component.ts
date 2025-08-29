@@ -1,10 +1,22 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AutoDestroyService} from '../../../../core/services/utils/auto-destroy.service';
-import {catchError, debounceTime, distinctUntilChanged, filter, of, switchMap, takeUntil} from 'rxjs';
-import {UserService} from '../../../profile/services/user.service';
+import {
+    catchError,
+    debounceTime,
+    distinctUntilChanged,
+    exhaustMap,
+    filter,
+    of,
+    Subject,
+    switchMap,
+    takeUntil
+} from 'rxjs';
+import {UserSearchResult, UserService} from '../../../profile/services/user.service';
 import {UserProfile} from '../../../../core/models/user/user-profile.model';
 import {RouterLink} from '@angular/router';
+import {map} from 'rxjs/operators';
+import {AuthService} from '../../../../core/services/common/auth.service';
 
 @Component({
   selector: 'app-user-search',
@@ -22,14 +34,20 @@ export class UserSearchComponent implements OnInit {
         username: new FormControl('', {validators: [Validators.maxLength(254)]}),
     })
 
-    protected users = signal<UserProfile[]>([]);
+    protected users = signal<UserSearchResult[]>([]);
     protected error = signal<string | undefined>(undefined);
 
-    constructor(private destroy$: AutoDestroyService, private userService: UserService) {}
+    protected followClicked$ = new Subject<string>();
+
+    protected currentUsername = signal<string>('');
+
+    constructor(private destroy$: AutoDestroyService, private userService: UserService, private authService: AuthService) {}
 
     ngOnInit() {
 
         this.subscribeToUsernameChange();
+        this.subscribeToFollowClicked();
+        this.currentUsername.set(this.authService.getCurrentUsername());
 
     }
 
@@ -69,6 +87,42 @@ export class UserSearchComponent implements OnInit {
 
             }
         })
+
+    }
+
+    subscribeToFollowClicked() {
+
+        this.followClicked$.pipe(
+            takeUntil(this.destroy$),
+            exhaustMap((name) => {
+                return this.userService.followUser(name).pipe(
+                    takeUntil(this.destroy$),
+                    map(() => ({success: true as const, username: name})),
+                    catchError(() => {
+                        return of({success: false as const});
+                    })
+                )
+            })
+        ).subscribe({
+            next: (value) => {
+
+                if(value.success){
+                    this.removeFollowButton(value.username);
+                } else {
+
+                    this.error.set("Unable to follow user");
+                }
+
+            }
+        });
+
+    }
+
+    removeFollowButton(username: string) {
+
+        this.users.update(currentUsers =>
+            currentUsers.map(user =>
+                user.username === username ? {...user, following: true}: user));
 
     }
 

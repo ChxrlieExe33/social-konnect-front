@@ -1,34 +1,43 @@
-<section class="w-full h-full flex flex-col items-center justify-items-start p-8 gap-4 min-h-[100vh] bg-gradient-to-r from-blue-300 to-blue-400">
+<section class="w-full h-full flex flex-col items-center justify-items-start p-4 lg:p-8 gap-4 min-h-[100vh] bg-gradient-to-r from-blue-300 to-blue-400">
 
-    <form class="w-[90%]" [formGroup]="form">
+    <form class="w-[95%]" [formGroup]="form">
         <input type="text" placeholder="Enter a username..." id="username" name="username" class="w-full p-4 bg-white rounded-2xl" formControlName="username"/>
     </form>
 
-    <ul class="flex flex-col items-start justify-items-start rounded-2xl gap-8 py-8 px-20">
+    <ul class="flex flex-col items-center justify-items-start rounded-2xl gap-4 py-8 lg:px-20 w-full">
 
         @if (users().length !== 0) {
 
-            @for (user of users(); track user.id) {
+            @for (user of users(); track user.username) {
 
-                <li>
+                <li class="flex items-center justify-between p-4 rounded-xl bg-white lg:px-8 w-[95%] shadow-xl hover:bg-blue-100/80">
 
-                    <a class="flex items-center justify-center gap-4 cursor-pointer hover:scale-110 hover:bg-slate-400 p-4 rounded-2xl" [routerLink]="'/profile/user/' + user.username">
+                    <span>
 
-                        @if (user.profilePictureUrl) {
+                        <a class="flex items-center justify-evenly gap-4 cursor-pointer" [routerLink]="'/profile/user/' + user.username">
 
-                            <img [src]="user.profilePictureUrl" [alt]="user.username + ' Profile picture'" class="rounded-full w-16 h-16"/>
+                            @if (user.profilePictureUrl) {
 
-                        } @else {
+                                <img [src]="user.profilePictureUrl" [alt]="user.username + ' Profile picture'" class="rounded-full w-16 h-16"/>
 
-                            <img src="/anonymous-pfp.webp" [alt]="user.username + ' Profile picture'" class="rounded-full w-16 h-16"/>
+                            } @else {
 
-                        }
+                                <img src="/anonymous-pfp.webp" [alt]="user.username + ' Profile picture'" class="rounded-full w-16 h-16"/>
 
+                            }
 
+                            <p  class="text-3xl">&#64;{{ user.username }}</p>
 
-                        <p  class="text-3xl">&#64;{{ user.username }}</p>
+                        </a>
 
-                    </a>
+                    </span>
+
+                    @if (!user.following && user.username !== currentUsername()) {
+
+                        <p class="text-2xl cursor-pointer hover:text-blue-400" (click)="followClicked$.next(user.username)">Follow +</p>
+
+                    }
+
 
                 </li>
 
