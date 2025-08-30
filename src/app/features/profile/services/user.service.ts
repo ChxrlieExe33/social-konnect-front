@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {UserProfile} from '../../../core/models/user/user-profile.model';
 import {Observable, tap} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {map} from 'rxjs/operators';
 import {UserMetadata} from '../../../core/models/user/user-metadata';
@@ -32,6 +32,21 @@ type UserSearchResultPage = {
     }
 }
 
+export type UsernameAndPfp = {
+    username: string,
+    profilePictureUrl: string,
+}
+
+export type UsernameAndPfpPage = {
+    content: UsernameAndPfp[],
+    page: {
+        number: number,
+        size: number,
+        totalElements: number,
+        totalPages: number
+    }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -40,6 +55,10 @@ export class UserService {
     constructor(
         private httpClient: HttpClient,
     ) { }
+
+    // ------------------------------------------------------------------------
+    // ---------------------------- User methods ------------------------------
+    // ------------------------------------------------------------------------
 
     getCurrentUser() : Observable<UserProfile> {
 
@@ -79,6 +98,22 @@ export class UserService {
 
     }
 
+    getProfilePictureByUsername(username : string) : Observable<{username: string, profilePictureUrl: string}> {
+
+        return this.httpClient.get<{username: string, profilePictureUrl: string}>(`${environment.backendBaseUrl}/api/user/pfp/${username}`)
+
+    }
+
+    updatePassword(oldPassword: string, newPassword: string) : Observable<void> {
+
+        return this.httpClient.put<void>(`${environment.backendBaseUrl}/api/user/password`, {old_password: oldPassword, new_password: newPassword})
+
+    }
+
+    // ------------------------------------------------------------------------
+    // ---------------------------- Follow methods ----------------------------
+    // ------------------------------------------------------------------------
+
     followUser(username : string) : Observable<void> {
 
         return this.httpClient.post<void>(`${environment.backendBaseUrl}/api/follow/${username}`, null)
@@ -91,16 +126,22 @@ export class UserService {
 
     }
 
-    getProfilePictureByUsername(username : string) : Observable<{username: string, profilePictureUrl: string}> {
+    getMyFollowers(page: number) : Observable<UsernameAndPfpPage> {
 
-        return this.httpClient.get<{username: string, profilePictureUrl: string}>(`${environment.backendBaseUrl}/api/user/pfp/${username}`)
+        const params = new HttpParams()
+            .set('page', page)
+
+        return this.httpClient.get<UsernameAndPfpPage>(`${environment.backendBaseUrl}/api/follow/my-followers`, {params})
+    }
+
+    getMyFollowing(page: number) : Observable<UsernameAndPfpPage> {
+
+        const params = new HttpParams();
+        params.append('page', page);
+
+        return this.httpClient.get<UsernameAndPfpPage>(`${environment.backendBaseUrl}/api/follow/my-following`, {params})
 
     }
 
-    updatePassword(oldPassword: string, newPassword: string) : Observable<void> {
-
-        return this.httpClient.put<void>(`${environment.backendBaseUrl}/api/user/password`, {old_password: oldPassword, new_password: newPassword})
-
-    }
 
 }

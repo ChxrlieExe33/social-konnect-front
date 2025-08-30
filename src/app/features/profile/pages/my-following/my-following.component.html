@@ -1,0 +1,5 @@
+<section class="w-full min-h-[100vh] bg-gradient-to-r from-blue-300 to-blue-400 flex items-center justify-center p-4 lg:p-12">
+
+    <app-follows-user-list [users]="users()" [displayGetMoreUsersButton]="nextPageExists()" (getMoreUsersClicked)="loadMoreClicked$.next()" listTitle="Who you follow"/>
+
+</section>

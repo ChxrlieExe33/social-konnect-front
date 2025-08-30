@@ -25,8 +25,8 @@
             @if (userMetadata()) {
 
                 <p><b>{{ userMetadata().posts }}</b> Posts</p>
-                <p><b>{{ userMetadata().followers }}</b> Followers</p>
-                <p><b>{{ userMetadata().following }}</b> Following</p>
+                <a routerLink="/profile/my-followers" class="cursor-pointer"><b>{{ userMetadata().followers }}</b> Followers</a>
+                <a routerLink="/profile/my-following" class="cursor-pointer"><b>{{ userMetadata().following }}</b> Following</a>
 
             } @else {
                 <p class="text-red-800 text-xl">Could not load user metadata</p>
