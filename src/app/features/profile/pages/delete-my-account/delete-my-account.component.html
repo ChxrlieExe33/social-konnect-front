@@ -1,0 +1,44 @@
+<section class="w-full min-h-[100vh] bg-gradient-to-r from-blue-300 to-blue-400 flex items-center justify-center">
+
+    <form class="w-[95%] lg:w-[60%] bg-white min-h-[60vh] lg:min-h-[55vh] rounded-xl flex flex-col items-center justify-items-start text-xl p-8 gap-6" [formGroup]="form" (ngSubmit)="deleteSubmitted$.next()">
+
+        <h1 class="text-2xl font-bold mb-4">Delete account</h1>
+
+        <p>Are you sure you want to do this?</p>
+
+        <p>This action is not reversible.</p>
+
+        @if (!deleteAccepted()) {
+
+            <span class="flex items-center justify-evenly w-full mt-4">
+
+                <p class="bg-red-800/80 p-4 rounded-xl cursor-pointer hover:scale-105" (click)="moveToNextStep()">Yes I am sure</p>
+
+                <p class="bg-blue-300/80 p-4 rounded-xl cursor-pointer hover:scale-105">No, go back</p>
+
+            </span>
+
+        } @else {
+
+            <input type="text" placeholder="Please insert your full username..." class="bg-blue-200/60 py-4 px-6 mt-4 rounded-xl w-[95%]" formControlName="username">
+
+            @if (usernameIncorrect) {
+
+                <p class="text-red-800 text-2xl">The username is incorrect.</p>
+
+            }
+
+            @if (error()) {
+
+                <p class="text-red-800 text-2xl">{{error()}}</p>
+
+            }
+
+            <button type="submit" class="bg-red-800/80 rounded-xl p-4 cursor-pointer hover:scale-105 mt-8 shadow-xl" [disabled]="usernameIncorrect">Delete my account</button>
+
+        }
+
+
+    </form>
+
+</section>

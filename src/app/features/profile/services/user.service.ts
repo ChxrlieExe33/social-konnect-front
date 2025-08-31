@@ -110,6 +110,11 @@ export class UserService {
 
     }
 
+    deleteMyAccount(): Observable<void> {
+
+        return this.httpClient.delete<void>(`${environment.backendBaseUrl}/api/user`)
+    }
+
     // ------------------------------------------------------------------------
     // ---------------------------- Follow methods ----------------------------
     // ------------------------------------------------------------------------
