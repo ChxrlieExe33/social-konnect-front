@@ -14,7 +14,8 @@ During the development of this codebase, I implemented many things such as:
 - RxJs & Signals for reactive state management
 - Authentication handling using guards & interceptors
 - API calls to paginated & non-paginated endpoints
-- Route resolvers to retrieve data before a component is loaded
+- Use of reactive forms in most places for a more modern approach
+- Route resolvers for some pages to retrieve data before a component is loaded
 
 # Development server
 
