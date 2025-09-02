@@ -1,0 +1,35 @@
+<ul class="list-none bg-white rounded-2xl w-[95%] lg:w-[60%] p-4 flex flex-col items-center justify-items-start justify-self-center gap-4">
+
+    @if (users().length === 0) {
+
+        <h1 class="text-2xl text-red-800">No users found.</h1>
+
+    } @else {
+
+        @for (user of users(); track user.username) {
+
+            <li class="w-[90%] lg:w-[50%] rounded-xl p-4 flex items-center justify-between px-12 hover:bg-blue-100 cursor-pointer" (click)="navigateToUserPage(user.username)">
+
+                @if (user.profilePictureUrl) {
+
+                    <img [src]="user.profilePictureUrl" [alt]="user.username + ' profile picture'" class="rounded-full h-18 w-18"/>
+
+                } @else {
+
+                    <img src="/anonymous-pfp.webp" [alt]="user.username + ' profile picture'" class="rounded-full h-18 w-18" />
+
+                }
+
+                <p class="text-2xl">&#64;{{ user.username }}</p>
+
+            </li>
+
+        }
+
+        @if (displayGetMoreUsersButton()) {
+            <p class="text-2xl hover:text-blue-400 cursor-pointer mt-8" (click)="loadMoreClicked()">Load more users...</p>
+        }
+
+    }
+
+</ul>

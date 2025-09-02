@@ -1,0 +1,5 @@
+<section class="w-full min-h-[100vh] bg-gradient-to-r flex items-center justify-center p-4 lg:p-12">
+
+    <app-users-who-liked [users]="users()" [displayGetMoreUsersButton]="nextPageExists()" (getMoreUsersClicked)="loadMoreClicked$.next()" />
+
+</section>

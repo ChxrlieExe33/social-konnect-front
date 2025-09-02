@@ -4,6 +4,7 @@ import {getPostDetailResolver} from '../../core/resolvers/post.resolver';
 import {PostNotFoundComponent} from './pages/post-not-found/post-not-found.component';
 import {CreatePostComponent} from './pages/create-post/create-post.component';
 import {UpdatePostComponent} from './pages/update-post/update-post.component';
+import {PostLikesComponent} from './pages/post-likes/post-likes.component';
 
 export const postRoutes : Routes = [
     {
@@ -23,6 +24,10 @@ export const postRoutes : Routes = [
     {
         path: "not-found",
         component: PostNotFoundComponent
+    },
+    {
+        path: "likes/:postId",
+        component: PostLikesComponent,
     },
     {
         path: 'create',

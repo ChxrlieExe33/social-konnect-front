@@ -114,7 +114,10 @@
     </span>
 
     @if (postMetadata()) {
-        <p class="self-start px-5 pt-5"><b>{{ postMetadata().likes }}</b> Likes <b>{{ postMetadata().comments }}</b> Comments</p>
+        <p class="self-start px-5 pt-5">
+            <a [routerLink]="'/posts/likes/' + postData().postId" class="mr-2"><b>{{ postMetadata().likes }}</b> Likes</a>
+            <b>{{ postMetadata().comments }}</b> Comments
+        </p>
     } @else {
         <p class="self-start px-5 pt-5">Loading likes and comments...</p>
     }
