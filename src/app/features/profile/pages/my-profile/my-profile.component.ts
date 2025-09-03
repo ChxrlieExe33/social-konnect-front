@@ -81,13 +81,15 @@ export class MyProfileComponent implements OnInit {
                 this.userPosts.set(data.content);
 
                 if (this.nextPage() + 1 === data.page.totalPages ) {
+
                     this.nextPageExists.set(false);
-                    console.log("There is no more pages of " + this.authService.getCurrentUsername() + " posts");
+
                 } else {
+
                     this.nextPageExists.set(true);
                     const currentPage = this.nextPage();
                     this.nextPage.set(currentPage + 1);
-                    console.log("There is more pages of " + this.authService.getCurrentUsername() + " posts");
+
                 }
             },
             error: (err) => {
@@ -122,13 +124,15 @@ export class MyProfileComponent implements OnInit {
             next: (data) => {
 
                 if (this.nextPage() + 1 === data.page.totalPages ) {
+
                     this.nextPageExists.set(false);
-                    console.log("There is no more pages of " + this.authService.getCurrentUsername() + " posts");
+
                 } else {
+
                     this.nextPageExists.set(true);
                     const currentPage = this.nextPage();
                     this.nextPage.set(currentPage + 1);
-                    console.log("There is more pages of " + this.authService.getCurrentUsername() + " posts");
+
                 }
 
                 const currentPosts = this.userPosts();
